@@ -11,7 +11,7 @@ import (
 // FindByIdMarks 		godoc
 // @Summary				Get Single Marks by id.
 // @Param				id path string true "get marks by id"
-// @Description			Return the tahs whoes marId valu mathes id.
+// @Description			Return the mark whose marId value matches id.
 // @Produce				application/json
 // @Tags			marks
 // @Success				200 {object} models.Mark "Mark found successfully."
