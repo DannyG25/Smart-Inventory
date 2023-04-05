@@ -1,4 +1,4 @@
-package impuesto
+package tax
 
 import (
 	"net/http"
@@ -20,7 +20,7 @@ type AddTaxBody struct {
 // @Tags			taxs
 // @Success			200 {object} models.Tax "successfully created tax."
 // @Router			/taxs [post]
-func Addtax(c *gin.Context) {
+func AddTax(c *gin.Context) {
 	body := AddTaxBody{}
 
 	//Check data in json format

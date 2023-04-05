@@ -3,8 +3,8 @@ package router
 import (
 	"net/http"
 
-	"github.com/gin-backend/pkg/controller/impuesto"
 	"github.com/gin-backend/pkg/controller/mark"
+	"github.com/gin-backend/pkg/controller/tax"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -28,12 +28,12 @@ func Routers() *gin.Engine {
 	marksRouter.PUT("/", mark.UpdateMark)
 	marksRouter.DELETE("/:id", mark.DeleteMark)
 
-	impuestosRouter := baseRouter.Group("/impuestos")
-	impuestosRouter.POST("/", impuesto.AddImpuesto)
-	impuestosRouter.GET("/", impuesto.GetImpuestos)
-	impuestosRouter.GET("/:id", impuesto.GetImpuesto)
-	impuestosRouter.PUT("/", impuesto.UpdateImpuesto)
-	impuestosRouter.DELETE("/:id", impuesto.DeleteImpuesto)
+	taxsRouter := baseRouter.Group("/taxs")
+	taxsRouter.POST("/", tax.AddTax)
+	taxsRouter.GET("/", tax.GetTaxs)
+	taxsRouter.GET("/:id", tax.GetTax)
+	taxsRouter.PUT("/", tax.UpdateTax)
+	taxsRouter.DELETE("/:id", tax.DeleteTax)
 
 	return router
 }

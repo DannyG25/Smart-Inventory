@@ -1,4 +1,4 @@
-package impuesto
+package tax
 
 import (
 	"net/http"
