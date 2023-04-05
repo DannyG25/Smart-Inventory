@@ -1,0 +1,229 @@
+basePath: /api
+definitions:
+  impuesto.AddImpuestoRequestBody:
+    properties:
+      imp_nombre:
+        type: string
+      imp_tasa:
+        type: number
+    type: object
+  impuesto.UpdateImpuestoRequestBody:
+    properties:
+      imp_nombre:
+        type: string
+      imp_tasa:
+        type: number
+    type: object
+  mark.AddMarkBody:
+    properties:
+      mar_id:
+        type: integer
+      mar_name:
+        type: string
+    type: object
+  mark.UpdateMarkBody:
+    properties:
+      mar_id:
+        type: integer
+      mar_name:
+        type: string
+    type: object
+  models.Impuesto:
+    properties:
+      imp_id:
+        type: integer
+      imp_nombre:
+        type: string
+      imp_tasa:
+        type: number
+    type: object
+  models.Mark:
+    properties:
+      mar_id:
+        type: integer
+      mar_name:
+        type: string
+    type: object
+host: localhost:3000
+info:
+  contact: {}
+  description: A Tag service API in Go using Gin framework
+  title: Tag Service API
+  version: "1.0"
+paths:
+  /impuestos:
+    get:
+      description: Return list of impuestos.
+      responses:
+        "200":
+          description: Impuestos recuperados exitosamente.
+          schema:
+            type: obejct
+      summary: Get All impuestos.
+      tags:
+      - impuestos
+    post:
+      description: Save impuestos data in Db.
+      parameters:
+      - description: Create impuestos
+        in: body
+        name: impuestos
+        required: true
+        schema:
+          $ref: '#/definitions/impuesto.AddImpuestoRequestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Impuesto creada exitosamente.
+          schema:
+            $ref: '#/definitions/models.Impuesto'
+      summary: Create impuestos
+      tags:
+      - impuestos
+  /impuestos/{id}:
+    delete:
+      description: Remove Impuestos data by id.
+      parameters:
+      - description: get Impuestos by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Impuesto borrada exitosamente.
+          schema:
+            $ref: '#/definitions/models.Impuesto'
+      summary: Delete Impuestos
+      tags:
+      - impuestos
+    get:
+      description: Return the tahs whoes marId valu mathes id.
+      parameters:
+      - description: get impuestos by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Impuesto encontrada exitosamente.
+          schema:
+            $ref: '#/definitions/models.Impuesto'
+      summary: Get Single Impuestos by id.
+      tags:
+      - impuestos
+    put:
+      description: Update impuestos data.
+      parameters:
+      - description: update Impuestos by id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update tags
+        in: body
+        name: impuestos
+        required: true
+        schema:
+          $ref: '#/definitions/impuesto.UpdateImpuestoRequestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Impuesto actualizada exitosamente.
+          schema:
+            $ref: '#/definitions/models.Impuesto'
+      summary: Update impuestos
+      tags:
+      - impuestos
+  /marks:
+    get:
+      description: Return list of marks.
+      responses:
+        "200":
+          description: Marks recuperadas exitosamente.
+          schema:
+            type: obejct
+      summary: Get All marks.
+      tags:
+      - marks
+    post:
+      description: Save marks data in Db.
+      parameters:
+      - description: Create marks
+        in: body
+        name: marks
+        required: true
+        schema:
+          $ref: '#/definitions/mark.AddMarkBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: successfully created mark.
+          schema:
+            $ref: '#/definitions/models.Mark'
+      summary: Create marks
+      tags:
+      - marks
+    put:
+      parameters:
+      - description: Update tags
+        in: body
+        name: marks
+        required: true
+        schema:
+          $ref: '#/definitions/mark.UpdateMarkBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Mark updated successfully.
+          schema:
+            $ref: '#/definitions/models.Mark'
+      tags:
+      - marks
+  /marks/{id}:
+    delete:
+      description: Remove marks data by id.
+      parameters:
+      - description: get marks by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Mark successfully erased.
+          schema:
+            $ref: '#/definitions/models.Mark'
+      summary: Delete marks
+      tags:
+      - marks
+    get:
+      description: Return the tahs whoes marId valu mathes id.
+      parameters:
+      - description: get marks by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Mark found successfully.
+          schema:
+            $ref: '#/definitions/models.Mark'
+      summary: Get Single Marks by id.
+      tags:
+      - marks
+swagger: "2.0"
