@@ -20,7 +20,7 @@ type AddMarkBody struct {
 // @Tags			marks
 // @Success			200 {object} models.Mark "successfully created mark."
 // @Router			/marks [post]
-func Addmark(c *gin.Context) {
+func AddMark(c *gin.Context) {
 	body := AddMarkBody{}
 
 	//Check data in json format

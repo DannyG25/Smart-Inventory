@@ -1,18 +1,18 @@
 basePath: /api
 definitions:
-  impuesto.AddImpuestoRequestBody:
+  category.AddCategoryBody:
     properties:
-      imp_nombre:
+      cat_id:
+        type: integer
+      cat_name:
         type: string
-      imp_tasa:
-        type: number
     type: object
-  impuesto.UpdateImpuestoRequestBody:
+  category.UpdateCategoryBody:
     properties:
-      imp_nombre:
+      cat_id:
+        type: integer
+      cat_name:
         type: string
-      imp_tasa:
-        type: number
     type: object
   mark.AddMarkBody:
     properties:
@@ -28,20 +28,129 @@ definitions:
       mar_name:
         type: string
     type: object
-  models.Impuesto:
+  models.Category:
     properties:
-      imp_id:
+      cat_id:
         type: integer
-      imp_nombre:
+      cat_name:
         type: string
-      imp_tasa:
-        type: number
     type: object
   models.Mark:
     properties:
       mar_id:
         type: integer
       mar_name:
+        type: string
+    type: object
+  models.Product:
+    properties:
+      category_cat_id:
+        $ref: '#/definitions/models.Category'
+      mark_mar_id:
+        $ref: '#/definitions/models.Mark'
+      pro_description:
+        type: string
+      pro_experydate:
+        type: string
+      pro_id:
+        type: integer
+      pro_name:
+        type: string
+      pro_photo:
+        type: string
+      pro_price:
+        type: integer
+      product_pro_id:
+        $ref: '#/definitions/models.Product'
+      tax_tax_id:
+        $ref: '#/definitions/models.Tax'
+      unit_measure_uni_id:
+        $ref: '#/definitions/models.Unit_Measure'
+    type: object
+  models.Tax:
+    properties:
+      tax_id:
+        type: integer
+      tax_name:
+        type: string
+      tax_rate:
+        type: number
+    type: object
+  models.Unit_Measure:
+    properties:
+      uni_abbreviation:
+        type: string
+      uni_id:
+        type: integer
+      uni_measure:
+        type: string
+    type: object
+  product.AddProductBody:
+    properties:
+      category_cat_id:
+        $ref: '#/definitions/models.Category'
+      mark_mar_id:
+        $ref: '#/definitions/models.Mark'
+      pro_description:
+        type: string
+      pro_experydate:
+        type: string
+      pro_id:
+        type: integer
+      pro_name:
+        type: string
+      pro_photo:
+        type: string
+      pro_price:
+        type: integer
+      product_pro_id:
+        $ref: '#/definitions/models.Product'
+      tax_tax_id:
+        $ref: '#/definitions/models.Tax'
+      unit_measure_uni_id:
+        $ref: '#/definitions/models.Unit_Measure'
+    type: object
+  product.UpdateMarkBody:
+    properties:
+      mar_id:
+        type: integer
+      mar_name:
+        type: string
+    type: object
+  tax.AddTaxBody:
+    properties:
+      tax_id:
+        type: integer
+      tax_name:
+        type: string
+      tax_rate:
+        type: number
+    type: object
+  tax.UpdateTaxBody:
+    properties:
+      tax_id:
+        type: integer
+      tax_name:
+        type: string
+      tax_rate:
+        type: number
+    type: object
+  unit_measure.AddUnit_MeasureBody:
+    properties:
+      uni_abbreviation:
+        type: string
+      uni_id:
+        type: integer
+      uni_measure:
+        type: string
+    type: object
+  unit_measure.UpdateUnit_MeasureBody:
+    properties:
+      uni_abbreviation:
+        type: string
+      uni_id:
+        type: integer
+      uni_measure:
         type: string
     type: object
 host: localhost:3000
@@ -51,97 +160,92 @@ info:
   title: Tag Service API
   version: "1.0"
 paths:
-  /impuestos:
+  /categories:
     get:
-      description: Return list of impuestos.
+      description: Return list of categories.
       responses:
         "200":
-          description: Impuestos recuperados exitosamente.
+          description: Categories successfully recovered.
           schema:
             type: obejct
-      summary: Get All impuestos.
+      summary: Get All categories.
       tags:
-      - impuestos
+      - categories
     post:
-      description: Save impuestos data in Db.
+      description: Save categories data in Db.
       parameters:
-      - description: Create impuestos
+      - description: Create categorys
         in: body
-        name: impuestos
+        name: categories
         required: true
         schema:
-          $ref: '#/definitions/impuesto.AddImpuestoRequestBody'
+          $ref: '#/definitions/category.AddCategoryBody'
       produces:
       - application/json
       responses:
         "200":
-          description: Impuesto creada exitosamente.
+          description: successfully created category.
           schema:
-            $ref: '#/definitions/models.Impuesto'
-      summary: Create impuestos
+            $ref: '#/definitions/models.Category'
+      summary: Create categories
       tags:
-      - impuestos
-  /impuestos/{id}:
-    delete:
-      description: Remove Impuestos data by id.
-      parameters:
-      - description: get Impuestos by id
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Impuesto borrada exitosamente.
-          schema:
-            $ref: '#/definitions/models.Impuesto'
-      summary: Delete Impuestos
-      tags:
-      - impuestos
-    get:
-      description: Return the tahs whoes marId valu mathes id.
-      parameters:
-      - description: get impuestos by id
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Impuesto encontrada exitosamente.
-          schema:
-            $ref: '#/definitions/models.Impuesto'
-      summary: Get Single Impuestos by id.
-      tags:
-      - impuestos
+      - categories
     put:
-      description: Update impuestos data.
+      description: Update categories data.
       parameters:
-      - description: update Impuestos by id
-        in: path
-        name: id
-        required: true
-        type: string
       - description: Update tags
         in: body
-        name: impuestos
+        name: categories
         required: true
         schema:
-          $ref: '#/definitions/impuesto.UpdateImpuestoRequestBody'
+          $ref: '#/definitions/category.UpdateCategoryBody'
       produces:
       - application/json
       responses:
         "200":
-          description: Impuesto actualizada exitosamente.
+          description: Category updated successfully.
           schema:
-            $ref: '#/definitions/models.Impuesto'
-      summary: Update impuestos
+            $ref: '#/definitions/models.Category'
+      summary: Update categories
       tags:
-      - impuestos
+      - categories
+  /categories/{id}:
+    delete:
+      description: Remove categories data by id.
+      parameters:
+      - description: get categorys by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Category successfully erased.
+          schema:
+            $ref: '#/definitions/models.Category'
+      summary: Delete categories
+      tags:
+      - categories
+    get:
+      description: Return the category whose catId value matches id.
+      parameters:
+      - description: get categories by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Category found successfully.
+          schema:
+            $ref: '#/definitions/models.Category'
+      summary: Get Single Categories by id.
+      tags:
+      - categories
   /marks:
     get:
       description: Return list of marks.
@@ -173,13 +277,14 @@ paths:
       tags:
       - marks
     put:
+      description: Update marks data.
       parameters:
       - description: Update tags
         in: body
         name: marks
         required: true
         schema:
-          $ref: '#/definitions/mark.UpdateMarkBody'
+          $ref: '#/definitions/product.UpdateMarkBody'
       produces:
       - application/json
       responses:
@@ -187,6 +292,7 @@ paths:
           description: Mark updated successfully.
           schema:
             $ref: '#/definitions/models.Mark'
+      summary: Update marks
       tags:
       - marks
   /marks/{id}:
@@ -209,7 +315,7 @@ paths:
       tags:
       - marks
     get:
-      description: Return the tahs whoes marId valu mathes id.
+      description: Return the mark whose marId value matches id.
       parameters:
       - description: get marks by id
         in: path
@@ -226,4 +332,196 @@ paths:
       summary: Get Single Marks by id.
       tags:
       - marks
+  /products:
+    post:
+      description: Save products data in Db.
+      parameters:
+      - description: Create products
+        in: body
+        name: products
+        required: true
+        schema:
+          $ref: '#/definitions/product.AddProductBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: successfully created product.
+          schema:
+            $ref: '#/definitions/models.Product'
+      summary: Create products
+      tags:
+      - products
+  /taxs:
+    get:
+      description: Return list of taxs.
+      responses:
+        "200":
+          description: Taxs successfully recovered.
+          schema:
+            type: obejct
+      summary: Get All taxs.
+      tags:
+      - taxs
+    post:
+      description: Save taxs data in Db.
+      parameters:
+      - description: Create taxs
+        in: body
+        name: taxs
+        required: true
+        schema:
+          $ref: '#/definitions/tax.AddTaxBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: successfully created tax.
+          schema:
+            $ref: '#/definitions/models.Tax'
+      summary: Create taxs
+      tags:
+      - taxs
+    put:
+      description: Update taxs data.
+      parameters:
+      - description: Update tags
+        in: body
+        name: taxs
+        required: true
+        schema:
+          $ref: '#/definitions/tax.UpdateTaxBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Tax updated successfully.
+          schema:
+            $ref: '#/definitions/models.Tax'
+      summary: Update taxs
+      tags:
+      - taxs
+  /taxs/{id}:
+    delete:
+      description: Remove taxs data by id.
+      parameters:
+      - description: get taxs by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Tax successfully erased.
+          schema:
+            $ref: '#/definitions/models.Tax'
+      summary: Delete taxs
+      tags:
+      - taxs
+    get:
+      description: Return the tax whose taxId value matches id.
+      parameters:
+      - description: get taxs by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Tax found successfully.
+          schema:
+            $ref: '#/definitions/models.Tax'
+      summary: Get Single Taxs by id.
+      tags:
+      - taxs
+  /unit_measures:
+    get:
+      description: Return list of unit_measures.
+      responses:
+        "200":
+          description: Unit_Measures recuperadas exitosamente.
+          schema:
+            type: obejct
+      summary: Get All unit_measures.
+      tags:
+      - unit_measures
+    post:
+      description: Save unit_measures data in Db.
+      parameters:
+      - description: Create unit_measures
+        in: body
+        name: unit_measures
+        required: true
+        schema:
+          $ref: '#/definitions/unit_measure.AddUnit_MeasureBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: successfully created unit_measure.
+          schema:
+            $ref: '#/definitions/models.Unit_Measure'
+      summary: Create unit_measures
+      tags:
+      - unit_measures
+    put:
+      description: Update unit_measures data.
+      parameters:
+      - description: Update tags
+        in: body
+        name: unit_measures
+        required: true
+        schema:
+          $ref: '#/definitions/unit_measure.UpdateUnit_MeasureBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Unit_Measure updated successfully.
+          schema:
+            $ref: '#/definitions/models.Unit_Measure'
+      summary: Update unit_measures
+      tags:
+      - unit_measures
+  /unit_measures/{id}:
+    delete:
+      description: Remove unit_measures data by id.
+      parameters:
+      - description: get unit_measures by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Unit_Measure successfully erased.
+          schema:
+            $ref: '#/definitions/models.Unit_Measure'
+      summary: Delete unit_measures
+      tags:
+      - unit_measures
+    get:
+      description: Return the unit_measure whose uniId value matches id.
+      parameters:
+      - description: get unit_Measures by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Unit_Measure found successfully.
+          schema:
+            $ref: '#/definitions/models.Unit_Measure'
+      summary: Get Single Unit_Measures by id.
+      tags:
+      - unit_measures
 swagger: "2.0"

@@ -12,7 +12,7 @@ import (
 // @Summary			Get All taxs.
 // @Description		Return list of taxs.
 // @Tags			taxs
-// @Success			200 {obejct} models.Tax "Taxsrecuperadas exitosamente."
+// @Success			200 {obejct} models.Tax "Taxs successfully recovered."
 // @Router			/taxs [get]
 func GetTaxs(c *gin.Context) {
 	var Taxs []models.Tax

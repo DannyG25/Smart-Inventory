@@ -16,66 +16,95 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/impuestos": {
+        "/categories": {
             "get": {
-                "description": "Return list of impuestos.",
+                "description": "Return list of categories.",
                 "tags": [
-                    "impuestos"
+                    "categories"
                 ],
-                "summary": "Get All impuestos.",
+                "summary": "Get All categories.",
                 "responses": {
                     "200": {
-                        "description": "Impuestos recuperados exitosamente.",
+                        "description": "Categories successfully recovered.",
                         "schema": {
                             "type": "obejct"
                         }
                     }
                 }
             },
-            "post": {
-                "description": "Save impuestos data in Db.",
+            "put": {
+                "description": "Update categories data.",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "impuestos"
+                    "categories"
                 ],
-                "summary": "Create impuestos",
+                "summary": "Update categories",
                 "parameters": [
                     {
-                        "description": "Create impuestos",
-                        "name": "impuestos",
+                        "description": "Update tags",
+                        "name": "categories",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/impuesto.AddImpuestoRequestBody"
+                            "$ref": "#/definitions/category.UpdateCategoryBody"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Impuesto creada exitosamente.",
+                        "description": "Category updated successfully.",
                         "schema": {
-                            "$ref": "#/definitions/models.Impuesto"
+                            "$ref": "#/definitions/models.Category"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Save categories data in Db.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "categories"
+                ],
+                "summary": "Create categories",
+                "parameters": [
+                    {
+                        "description": "Create categorys",
+                        "name": "categories",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/category.AddCategoryBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfully created category.",
+                        "schema": {
+                            "$ref": "#/definitions/models.Category"
                         }
                     }
                 }
             }
         },
-        "/impuestos/{id}": {
+        "/categories/{id}": {
             "get": {
-                "description": "Return the tahs whoes marId valu mathes id.",
+                "description": "Return the category whose catId value matches id.",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "impuestos"
+                    "categories"
                 ],
-                "summary": "Get Single Impuestos by id.",
+                "summary": "Get Single Categories by id.",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "get impuestos by id",
+                        "description": "get categories by id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -83,62 +112,26 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Impuesto encontrada exitosamente.",
+                        "description": "Category found successfully.",
                         "schema": {
-                            "$ref": "#/definitions/models.Impuesto"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "Update impuestos data.",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "impuestos"
-                ],
-                "summary": "Update impuestos",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "update Impuestos by id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Update tags",
-                        "name": "impuestos",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/impuesto.UpdateImpuestoRequestBody"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Impuesto actualizada exitosamente.",
-                        "schema": {
-                            "$ref": "#/definitions/models.Impuesto"
+                            "$ref": "#/definitions/models.Category"
                         }
                     }
                 }
             },
             "delete": {
-                "description": "Remove Impuestos data by id.",
+                "description": "Remove categories data by id.",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "impuestos"
+                    "categories"
                 ],
-                "summary": "Delete Impuestos",
+                "summary": "Delete categories",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "get Impuestos by id",
+                        "description": "get categorys by id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -146,9 +139,9 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Impuesto borrada exitosamente.",
+                        "description": "Category successfully erased.",
                         "schema": {
-                            "$ref": "#/definitions/models.Impuesto"
+                            "$ref": "#/definitions/models.Category"
                         }
                     }
                 }
@@ -171,12 +164,14 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "description": "Update marks data.",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "marks"
                 ],
+                "summary": "Update marks",
                 "parameters": [
                     {
                         "description": "Update tags",
@@ -184,7 +179,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/mark.UpdateMarkBody"
+                            "$ref": "#/definitions/product.UpdateMarkBody"
                         }
                     }
                 ],
@@ -229,7 +224,7 @@ const docTemplate = `{
         },
         "/marks/{id}": {
             "get": {
-                "description": "Return the tahs whoes marId valu mathes id.",
+                "description": "Return the mark whose marId value matches id.",
                 "produces": [
                     "application/json"
                 ],
@@ -282,28 +277,321 @@ const docTemplate = `{
                     }
                 }
             }
-        }
-    },
-    "definitions": {
-        "impuesto.AddImpuestoRequestBody": {
-            "type": "object",
-            "properties": {
-                "imp_nombre": {
-                    "type": "string"
-                },
-                "imp_tasa": {
-                    "type": "number"
+        },
+        "/products": {
+            "post": {
+                "description": "Save products data in Db.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "Create products",
+                "parameters": [
+                    {
+                        "description": "Create products",
+                        "name": "products",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/product.AddProductBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfully created product.",
+                        "schema": {
+                            "$ref": "#/definitions/models.Product"
+                        }
+                    }
                 }
             }
         },
-        "impuesto.UpdateImpuestoRequestBody": {
+        "/taxs": {
+            "get": {
+                "description": "Return list of taxs.",
+                "tags": [
+                    "taxs"
+                ],
+                "summary": "Get All taxs.",
+                "responses": {
+                    "200": {
+                        "description": "Taxs successfully recovered.",
+                        "schema": {
+                            "type": "obejct"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update taxs data.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "taxs"
+                ],
+                "summary": "Update taxs",
+                "parameters": [
+                    {
+                        "description": "Update tags",
+                        "name": "taxs",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/tax.UpdateTaxBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tax updated successfully.",
+                        "schema": {
+                            "$ref": "#/definitions/models.Tax"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Save taxs data in Db.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "taxs"
+                ],
+                "summary": "Create taxs",
+                "parameters": [
+                    {
+                        "description": "Create taxs",
+                        "name": "taxs",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/tax.AddTaxBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfully created tax.",
+                        "schema": {
+                            "$ref": "#/definitions/models.Tax"
+                        }
+                    }
+                }
+            }
+        },
+        "/taxs/{id}": {
+            "get": {
+                "description": "Return the tax whose taxId value matches id.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "taxs"
+                ],
+                "summary": "Get Single Taxs by id.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "get taxs by id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tax found successfully.",
+                        "schema": {
+                            "$ref": "#/definitions/models.Tax"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Remove taxs data by id.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "taxs"
+                ],
+                "summary": "Delete taxs",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "get taxs by id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tax successfully erased.",
+                        "schema": {
+                            "$ref": "#/definitions/models.Tax"
+                        }
+                    }
+                }
+            }
+        },
+        "/unit_measures": {
+            "get": {
+                "description": "Return list of unit_measures.",
+                "tags": [
+                    "unit_measures"
+                ],
+                "summary": "Get All unit_measures.",
+                "responses": {
+                    "200": {
+                        "description": "Unit_Measures recuperadas exitosamente.",
+                        "schema": {
+                            "type": "obejct"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update unit_measures data.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "unit_measures"
+                ],
+                "summary": "Update unit_measures",
+                "parameters": [
+                    {
+                        "description": "Update tags",
+                        "name": "unit_measures",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/unit_measure.UpdateUnit_MeasureBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Unit_Measure updated successfully.",
+                        "schema": {
+                            "$ref": "#/definitions/models.Unit_Measure"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Save unit_measures data in Db.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "unit_measures"
+                ],
+                "summary": "Create unit_measures",
+                "parameters": [
+                    {
+                        "description": "Create unit_measures",
+                        "name": "unit_measures",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/unit_measure.AddUnit_MeasureBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfully created unit_measure.",
+                        "schema": {
+                            "$ref": "#/definitions/models.Unit_Measure"
+                        }
+                    }
+                }
+            }
+        },
+        "/unit_measures/{id}": {
+            "get": {
+                "description": "Return the unit_measure whose uniId value matches id.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "unit_measures"
+                ],
+                "summary": "Get Single Unit_Measures by id.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "get unit_Measures by id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Unit_Measure found successfully.",
+                        "schema": {
+                            "$ref": "#/definitions/models.Unit_Measure"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Remove unit_measures data by id.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "unit_measures"
+                ],
+                "summary": "Delete unit_measures",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "get unit_measures by id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Unit_Measure successfully erased.",
+                        "schema": {
+                            "$ref": "#/definitions/models.Unit_Measure"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "category.AddCategoryBody": {
             "type": "object",
             "properties": {
-                "imp_nombre": {
-                    "type": "string"
+                "cat_id": {
+                    "type": "integer"
                 },
-                "imp_tasa": {
-                    "type": "number"
+                "cat_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "category.UpdateCategoryBody": {
+            "type": "object",
+            "properties": {
+                "cat_id": {
+                    "type": "integer"
+                },
+                "cat_name": {
+                    "type": "string"
                 }
             }
         },
@@ -329,17 +617,14 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Impuesto": {
+        "models.Category": {
             "type": "object",
             "properties": {
-                "imp_id": {
+                "cat_id": {
                     "type": "integer"
                 },
-                "imp_nombre": {
+                "cat_name": {
                     "type": "string"
-                },
-                "imp_tasa": {
-                    "type": "number"
                 }
             }
         },
@@ -350,6 +635,177 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "mar_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Product": {
+            "type": "object",
+            "properties": {
+                "category_cat_id": {
+                    "$ref": "#/definitions/models.Category"
+                },
+                "mark_mar_id": {
+                    "$ref": "#/definitions/models.Mark"
+                },
+                "pro_description": {
+                    "type": "string"
+                },
+                "pro_experydate": {
+                    "type": "string"
+                },
+                "pro_id": {
+                    "type": "integer"
+                },
+                "pro_name": {
+                    "type": "string"
+                },
+                "pro_photo": {
+                    "type": "string"
+                },
+                "pro_price": {
+                    "type": "integer"
+                },
+                "product_pro_id": {
+                    "$ref": "#/definitions/models.Product"
+                },
+                "tax_tax_id": {
+                    "$ref": "#/definitions/models.Tax"
+                },
+                "unit_measure_uni_id": {
+                    "$ref": "#/definitions/models.Unit_Measure"
+                }
+            }
+        },
+        "models.Tax": {
+            "type": "object",
+            "properties": {
+                "tax_id": {
+                    "type": "integer"
+                },
+                "tax_name": {
+                    "type": "string"
+                },
+                "tax_rate": {
+                    "type": "number"
+                }
+            }
+        },
+        "models.Unit_Measure": {
+            "type": "object",
+            "properties": {
+                "uni_abbreviation": {
+                    "type": "string"
+                },
+                "uni_id": {
+                    "type": "integer"
+                },
+                "uni_measure": {
+                    "type": "string"
+                }
+            }
+        },
+        "product.AddProductBody": {
+            "type": "object",
+            "properties": {
+                "category_cat_id": {
+                    "$ref": "#/definitions/models.Category"
+                },
+                "mark_mar_id": {
+                    "$ref": "#/definitions/models.Mark"
+                },
+                "pro_description": {
+                    "type": "string"
+                },
+                "pro_experydate": {
+                    "type": "string"
+                },
+                "pro_id": {
+                    "type": "integer"
+                },
+                "pro_name": {
+                    "type": "string"
+                },
+                "pro_photo": {
+                    "type": "string"
+                },
+                "pro_price": {
+                    "type": "integer"
+                },
+                "product_pro_id": {
+                    "$ref": "#/definitions/models.Product"
+                },
+                "tax_tax_id": {
+                    "$ref": "#/definitions/models.Tax"
+                },
+                "unit_measure_uni_id": {
+                    "$ref": "#/definitions/models.Unit_Measure"
+                }
+            }
+        },
+        "product.UpdateMarkBody": {
+            "type": "object",
+            "properties": {
+                "mar_id": {
+                    "type": "integer"
+                },
+                "mar_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "tax.AddTaxBody": {
+            "type": "object",
+            "properties": {
+                "tax_id": {
+                    "type": "integer"
+                },
+                "tax_name": {
+                    "type": "string"
+                },
+                "tax_rate": {
+                    "type": "number"
+                }
+            }
+        },
+        "tax.UpdateTaxBody": {
+            "type": "object",
+            "properties": {
+                "tax_id": {
+                    "type": "integer"
+                },
+                "tax_name": {
+                    "type": "string"
+                },
+                "tax_rate": {
+                    "type": "number"
+                }
+            }
+        },
+        "unit_measure.AddUnit_MeasureBody": {
+            "type": "object",
+            "properties": {
+                "uni_abbreviation": {
+                    "type": "string"
+                },
+                "uni_id": {
+                    "type": "integer"
+                },
+                "uni_measure": {
+                    "type": "string"
+                }
+            }
+        },
+        "unit_measure.UpdateUnit_MeasureBody": {
+            "type": "object",
+            "properties": {
+                "uni_abbreviation": {
+                    "type": "string"
+                },
+                "uni_id": {
+                    "type": "integer"
+                },
+                "uni_measure": {
                     "type": "string"
                 }
             }

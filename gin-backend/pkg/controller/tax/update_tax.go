@@ -23,6 +23,7 @@ type UpdateTaxBody struct {
 func UpdateTax(c *gin.Context) {
 
 	body := UpdateTaxBody{}
+	taxs := models.Tax{}
 
 	if err := c.BindJSON(&body); err != nil {
 		c.AbortWithError(http.StatusBadRequest, err)
@@ -31,16 +32,17 @@ func UpdateTax(c *gin.Context) {
 		return
 	}
 
-	if result := db.DB.Table("tax").Where("tax_id", body.Tax_id); result.Error != nil {
+	if result := db.DB.Table("tax").Where("tax_id", body.Tax_id).First(&taxs); result.Error != nil {
 		c.AbortWithError(http.StatusNotFound, result.Error)
 		return
 	}
 
 	if err := db.DB.Table("tax").Model(&body).Where("tax_id", body.Tax_id).Updates(&body).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al actualizar el registro"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update record"})
 		return
-	}
+	} else {
+		c.JSON(http.StatusOK, &body)
 
-	c.JSON(http.StatusOK, &body)
+	}
 
 }

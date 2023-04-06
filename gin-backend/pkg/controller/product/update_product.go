@@ -1,4 +1,4 @@
-package mark
+package product
 
 import (
 	"net/http"
