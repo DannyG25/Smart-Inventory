@@ -76,13 +76,13 @@ func LoginUser(c *gin.Context) {
 	c.SetSameSite(http.SameSiteNoneMode)
 	c.SetCookie("Authorization", tokenString, 3600*24*30, "", "", false, false)
 
-	c.JSON(http.StatusOK, gin.H{})
+	c.JSON(http.StatusOK, gin.H{
+		"token": tokenString,
+	})
 }
 
 func Validate(c *gin.Context) {
 	user, _ := c.Get("user")
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": user,
-	})
+	c.JSON(http.StatusOK, user)
 }
