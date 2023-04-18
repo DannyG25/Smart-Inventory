@@ -25,10 +25,7 @@ const docTemplate = `{
                 "summary": "Get All categories.",
                 "responses": {
                     "200": {
-                        "description": "Categories successfully recovered.",
-                        "schema": {
-                            "type": "obejct"
-                        }
+                        "description": "Categories successfully recovered."
                     }
                 }
             },
@@ -56,7 +53,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Category updated successfully.",
                         "schema": {
-                            "$ref": "#/definitions/models.Category"
+                            "$ref": "#/definitions/category.UpdateCategoryBody"
                         }
                     }
                 }
@@ -85,7 +82,7 @@ const docTemplate = `{
                     "200": {
                         "description": "successfully created category.",
                         "schema": {
-                            "$ref": "#/definitions/models.Category"
+                            "$ref": "#/definitions/category.AddCategoryBody"
                         }
                     }
                 }
@@ -112,10 +109,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Category found successfully.",
-                        "schema": {
-                            "$ref": "#/definitions/models.Category"
-                        }
+                        "description": "Category found successfully."
                     }
                 }
             },
@@ -139,10 +133,129 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Category successfully erased.",
+                        "description": "Category successfully erased."
+                    }
+                }
+            }
+        },
+        "/companies": {
+            "get": {
+                "description": "Return list of companies.",
+                "tags": [
+                    "companies"
+                ],
+                "summary": "Get All companies.",
+                "responses": {
+                    "200": {
+                        "description": "Companies successfully recovered."
+                    }
+                }
+            },
+            "put": {
+                "description": "Update companies data.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "companies"
+                ],
+                "summary": "Update companies",
+                "parameters": [
+                    {
+                        "description": "Update tags",
+                        "name": "companies",
+                        "in": "body",
+                        "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Category"
+                            "$ref": "#/definitions/company.UpdateCompanyBody"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Company updated successfully.",
+                        "schema": {
+                            "$ref": "#/definitions/company.UpdateCompanyBody"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Save companies data in Db.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "companies"
+                ],
+                "summary": "Create companies",
+                "parameters": [
+                    {
+                        "description": "Create companies",
+                        "name": "companies",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/company.AddCompanyBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfully created company.",
+                        "schema": {
+                            "$ref": "#/definitions/company.AddCompanyBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/companies/{id}": {
+            "get": {
+                "description": "Return the company whose marId value matches id.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "companies"
+                ],
+                "summary": "Get Single Companies by id.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "get companies by id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Company found successfully."
+                    }
+                }
+            },
+            "delete": {
+                "description": "Remove companies data by id.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "companies"
+                ],
+                "summary": "Delete companies",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "get companies by id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Company successfully erased."
                     }
                 }
             }
@@ -156,10 +269,7 @@ const docTemplate = `{
                 "summary": "Get All marks.",
                 "responses": {
                     "200": {
-                        "description": "Marks recuperadas exitosamente.",
-                        "schema": {
-                            "type": "obejct"
-                        }
+                        "description": "Marks successfully recovered."
                     }
                 }
             },
@@ -174,12 +284,12 @@ const docTemplate = `{
                 "summary": "Update marks",
                 "parameters": [
                     {
-                        "description": "Update tags",
+                        "description": "Update marks",
                         "name": "marks",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/product.UpdateMarkBody"
+                            "$ref": "#/definitions/mark.UpdateMarkBody"
                         }
                     }
                 ],
@@ -187,7 +297,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Mark updated successfully.",
                         "schema": {
-                            "$ref": "#/definitions/models.Mark"
+                            "$ref": "#/definitions/mark.UpdateMarkBody"
                         }
                     }
                 }
@@ -216,7 +326,7 @@ const docTemplate = `{
                     "200": {
                         "description": "successfully created mark.",
                         "schema": {
-                            "$ref": "#/definitions/models.Mark"
+                            "$ref": "#/definitions/mark.AddMarkBody"
                         }
                     }
                 }
@@ -243,10 +353,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Mark found successfully.",
-                        "schema": {
-                            "$ref": "#/definitions/models.Mark"
-                        }
+                        "description": "Mark found successfully."
                     }
                 }
             },
@@ -270,15 +377,41 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Mark successfully erased.",
-                        "schema": {
-                            "$ref": "#/definitions/models.Mark"
-                        }
+                        "description": "Mark successfully erased."
                     }
                 }
             }
         },
         "/products": {
+            "put": {
+                "description": "Update products data.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "Update products",
+                "parameters": [
+                    {
+                        "description": "Update tags",
+                        "name": "products",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/product.UpdateProductBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product updated successfully.",
+                        "schema": {
+                            "$ref": "#/definitions/product.UpdateProductBody"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Save products data in Db.",
                 "produces": [
@@ -303,7 +436,7 @@ const docTemplate = `{
                     "200": {
                         "description": "successfully created product.",
                         "schema": {
-                            "$ref": "#/definitions/models.Product"
+                            "$ref": "#/definitions/product.AddProductBody"
                         }
                     }
                 }
@@ -318,10 +451,7 @@ const docTemplate = `{
                 "summary": "Get All taxs.",
                 "responses": {
                     "200": {
-                        "description": "Taxs successfully recovered.",
-                        "schema": {
-                            "type": "obejct"
-                        }
+                        "description": "Taxs successfully recovered."
                     }
                 }
             },
@@ -349,7 +479,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Tax updated successfully.",
                         "schema": {
-                            "$ref": "#/definitions/models.Tax"
+                            "$ref": "#/definitions/tax.UpdateTaxBody"
                         }
                     }
                 }
@@ -378,7 +508,7 @@ const docTemplate = `{
                     "200": {
                         "description": "successfully created tax.",
                         "schema": {
-                            "$ref": "#/definitions/models.Tax"
+                            "$ref": "#/definitions/tax.AddTaxBody"
                         }
                     }
                 }
@@ -405,10 +535,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Tax found successfully.",
-                        "schema": {
-                            "$ref": "#/definitions/models.Tax"
-                        }
+                        "description": "Tax found successfully."
                     }
                 }
             },
@@ -432,10 +559,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Tax successfully erased.",
-                        "schema": {
-                            "$ref": "#/definitions/models.Tax"
-                        }
+                        "description": "Tax successfully erased."
                     }
                 }
             }
@@ -449,10 +573,7 @@ const docTemplate = `{
                 "summary": "Get All unit_measures.",
                 "responses": {
                     "200": {
-                        "description": "Unit_Measures recuperadas exitosamente.",
-                        "schema": {
-                            "type": "obejct"
-                        }
+                        "description": "Unit_Measures successfully recovered."
                     }
                 }
             },
@@ -480,7 +601,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Unit_Measure updated successfully.",
                         "schema": {
-                            "$ref": "#/definitions/models.Unit_Measure"
+                            "$ref": "#/definitions/unit_measure.UpdateUnit_MeasureBody"
                         }
                     }
                 }
@@ -509,7 +630,7 @@ const docTemplate = `{
                     "200": {
                         "description": "successfully created unit_measure.",
                         "schema": {
-                            "$ref": "#/definitions/models.Unit_Measure"
+                            "$ref": "#/definitions/unit_measure.AddUnit_MeasureBody"
                         }
                     }
                 }
@@ -536,10 +657,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Unit_Measure found successfully.",
-                        "schema": {
-                            "$ref": "#/definitions/models.Unit_Measure"
-                        }
+                        "description": "Unit_Measure found successfully."
                     }
                 }
             },
@@ -563,10 +681,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Unit_Measure successfully erased.",
-                        "schema": {
-                            "$ref": "#/definitions/models.Unit_Measure"
-                        }
+                        "description": "Unit_Measure successfully erased."
                     }
                 }
             }
@@ -576,9 +691,6 @@ const docTemplate = `{
         "category.AddCategoryBody": {
             "type": "object",
             "properties": {
-                "cat_id": {
-                    "type": "integer"
-                },
                 "cat_name": {
                     "type": "string"
                 }
@@ -587,20 +699,20 @@ const docTemplate = `{
         "category.UpdateCategoryBody": {
             "type": "object",
             "properties": {
-                "cat_id": {
-                    "type": "integer"
-                },
                 "cat_name": {
                     "type": "string"
                 }
             }
         },
+        "company.AddCompanyBody": {
+            "type": "object"
+        },
+        "company.UpdateCompanyBody": {
+            "type": "object"
+        },
         "mark.AddMarkBody": {
             "type": "object",
             "properties": {
-                "mar_id": {
-                    "type": "integer"
-                },
                 "mar_name": {
                     "type": "string"
                 }
@@ -609,206 +721,31 @@ const docTemplate = `{
         "mark.UpdateMarkBody": {
             "type": "object",
             "properties": {
-                "mar_id": {
+                "id": {
                     "type": "integer"
                 },
                 "mar_name": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.Category": {
-            "type": "object",
-            "properties": {
-                "cat_id": {
-                    "type": "integer"
-                },
-                "cat_name": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.Mark": {
-            "type": "object",
-            "properties": {
-                "mar_id": {
-                    "type": "integer"
-                },
-                "mar_name": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.Product": {
-            "type": "object",
-            "properties": {
-                "category_cat_id": {
-                    "$ref": "#/definitions/models.Category"
-                },
-                "mark_mar_id": {
-                    "$ref": "#/definitions/models.Mark"
-                },
-                "pro_description": {
-                    "type": "string"
-                },
-                "pro_experydate": {
-                    "type": "string"
-                },
-                "pro_id": {
-                    "type": "integer"
-                },
-                "pro_name": {
-                    "type": "string"
-                },
-                "pro_photo": {
-                    "type": "string"
-                },
-                "pro_price": {
-                    "type": "integer"
-                },
-                "product_pro_id": {
-                    "$ref": "#/definitions/models.Product"
-                },
-                "tax_tax_id": {
-                    "$ref": "#/definitions/models.Tax"
-                },
-                "unit_measure_uni_id": {
-                    "$ref": "#/definitions/models.Unit_Measure"
-                }
-            }
-        },
-        "models.Tax": {
-            "type": "object",
-            "properties": {
-                "tax_id": {
-                    "type": "integer"
-                },
-                "tax_name": {
-                    "type": "string"
-                },
-                "tax_rate": {
-                    "type": "number"
-                }
-            }
-        },
-        "models.Unit_Measure": {
-            "type": "object",
-            "properties": {
-                "uni_abbreviation": {
-                    "type": "string"
-                },
-                "uni_id": {
-                    "type": "integer"
-                },
-                "uni_measure": {
                     "type": "string"
                 }
             }
         },
         "product.AddProductBody": {
-            "type": "object",
-            "properties": {
-                "category_cat_id": {
-                    "$ref": "#/definitions/models.Category"
-                },
-                "mark_mar_id": {
-                    "$ref": "#/definitions/models.Mark"
-                },
-                "pro_description": {
-                    "type": "string"
-                },
-                "pro_experydate": {
-                    "type": "string"
-                },
-                "pro_id": {
-                    "type": "integer"
-                },
-                "pro_name": {
-                    "type": "string"
-                },
-                "pro_photo": {
-                    "type": "string"
-                },
-                "pro_price": {
-                    "type": "integer"
-                },
-                "product_pro_id": {
-                    "$ref": "#/definitions/models.Product"
-                },
-                "tax_tax_id": {
-                    "$ref": "#/definitions/models.Tax"
-                },
-                "unit_measure_uni_id": {
-                    "$ref": "#/definitions/models.Unit_Measure"
-                }
-            }
+            "type": "object"
         },
-        "product.UpdateMarkBody": {
-            "type": "object",
-            "properties": {
-                "mar_id": {
-                    "type": "integer"
-                },
-                "mar_name": {
-                    "type": "string"
-                }
-            }
+        "product.UpdateProductBody": {
+            "type": "object"
         },
         "tax.AddTaxBody": {
-            "type": "object",
-            "properties": {
-                "tax_id": {
-                    "type": "integer"
-                },
-                "tax_name": {
-                    "type": "string"
-                },
-                "tax_rate": {
-                    "type": "number"
-                }
-            }
+            "type": "object"
         },
         "tax.UpdateTaxBody": {
-            "type": "object",
-            "properties": {
-                "tax_id": {
-                    "type": "integer"
-                },
-                "tax_name": {
-                    "type": "string"
-                },
-                "tax_rate": {
-                    "type": "number"
-                }
-            }
+            "type": "object"
         },
         "unit_measure.AddUnit_MeasureBody": {
-            "type": "object",
-            "properties": {
-                "uni_abbreviation": {
-                    "type": "string"
-                },
-                "uni_id": {
-                    "type": "integer"
-                },
-                "uni_measure": {
-                    "type": "string"
-                }
-            }
+            "type": "object"
         },
         "unit_measure.UpdateUnit_MeasureBody": {
-            "type": "object",
-            "properties": {
-                "uni_abbreviation": {
-                    "type": "string"
-                },
-                "uni_id": {
-                    "type": "integer"
-                },
-                "uni_measure": {
-                    "type": "string"
-                }
-            }
+            "type": "object"
         }
     }
 }`

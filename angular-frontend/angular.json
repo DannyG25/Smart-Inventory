@@ -31,17 +31,15 @@
               "src/assets"
             ],
             "styles": [
-              "src/assets/scss/style.scss",
               "src/styles.scss"
-            ],
-            "scripts": []
+            ]
           },
           "configurations": {
             "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "5mb",
+                  "maximumWarning": "1mb",
                   "maximumError": "5mb"
                 },
                 {
@@ -104,11 +102,24 @@
             ],
             "scripts": []
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
   },
+  "defaultProject": "angular-frontend",
   "cli": {
-    "analytics": false
+    "analytics": false,
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
   }
 }

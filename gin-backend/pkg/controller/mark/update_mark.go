@@ -9,16 +9,17 @@ import (
 )
 
 type UpdateMarkBody struct {
-	models.Mark
+	Id       int
+	Mar_name string
 }
 
 // UpdateMarks		godoc
 // @Summary			Update marks
 // @Description		Update marks data.
-// @Param			marks body UpdateMarkBody{} true  "Update tags"
+// @Param			marks body UpdateMarkBody{} true  "Update marks"
 // @Tags			marks
 // @Produce			application/json
-// @Success			200 {object} models.Mark "Mark updated successfully."
+// @Success			200 {object} UpdateMarkBody{} "Mark updated successfully."
 // @Router			/marks [put]
 func UpdateMark(c *gin.Context) {
 
@@ -31,16 +32,19 @@ func UpdateMark(c *gin.Context) {
 		return
 	}
 
-	if result := db.DB.Table("mark").Where("mar_id", body.Mar_id).First(&marks); result.Error != nil {
+	if result := db.DB.Where("id", body.Id).First(&marks); result.Error != nil {
 		c.AbortWithError(http.StatusNotFound, result.Error)
 		return
 	}
 
-	if err := db.DB.Table("mark").Model(&body).Where("mar_id", body.Mar_id).Updates(&body).Error; err != nil {
+	marks.ID = uint(body.Id)
+	marks.Mar_name = body.Mar_name
+
+	if err := db.DB.Where("id", marks.ID).Updates(&marks).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update record"})
 		return
 	} else {
-		c.JSON(http.StatusOK, &body)
+		c.JSON(http.StatusOK, &marks)
 	}
 
 }

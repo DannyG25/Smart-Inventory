@@ -12,7 +12,7 @@ import (
 // @Summary			Get All categories.
 // @Description		Return list of categories.
 // @Tags			categories
-// @Success			200 {obejct} models.Category "Categories successfully recovered."
+// @Success			200  "Categories successfully recovered."
 // @Router			/categories [get]
 func GetCategories(c *gin.Context) {
 	var Categorys []models.Category

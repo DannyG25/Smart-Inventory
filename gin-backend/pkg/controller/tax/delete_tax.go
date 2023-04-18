@@ -14,7 +14,7 @@ import (
 // @Description		Remove taxs data by id.
 // @Produce			application/json
 // @Tags		    taxs
-// @Success			200 {object} models.Tax "Tax successfully erased."
+// @Success			200  "Tax successfully erased."
 // @Router			/taxs/{id} [delete]
 func DeleteTax(c *gin.Context) {
 	id := c.Param("id")

@@ -14,7 +14,7 @@ import (
 // @Description		Remove categories data by id.
 // @Produce			application/json
 // @Tags		    categories
-// @Success			200 {object} models.Category "Category successfully erased."
+// @Success			200  "Category successfully erased."
 // @Router			/categories/{id} [delete]
 func DeleteCategory(c *gin.Context) {
 	id := c.Param("id")

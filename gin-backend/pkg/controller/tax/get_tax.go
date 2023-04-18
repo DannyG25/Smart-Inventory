@@ -14,7 +14,7 @@ import (
 // @Description			Return the tax whose taxId value matches id.
 // @Produce				application/json
 // @Tags			taxs
-// @Success				200 {object} models.Tax "Tax found successfully."
+// @Success				200  "Tax found successfully."
 // @Router				/taxs/{id} [get]
 func GetTax(c *gin.Context) {
 	id := c.Param("id")

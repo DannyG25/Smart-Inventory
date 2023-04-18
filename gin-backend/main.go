@@ -1,13 +1,13 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	_ "github.com/gin-backend/docs"
-
 	"github.com/gin-backend/pkg/common/db"
-	"github.com/gin-backend/pkg/helper"
 	"github.com/gin-backend/pkg/router"
+	"github.com/rs/cors"
 	"github.com/spf13/viper"
 )
 
@@ -31,11 +31,23 @@ func main() {
 
 	// routes.Run(port)
 
-	server := &http.Server{
-		Addr:    port,
-		Handler: routes,
-	}
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:4200"},
+		AllowCredentials: true,
+		AllowedMethods:   []string{"GET", "DELETE", "POST", "PUT", "OPTIONS"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization"},
+		MaxAge:           86400,
+	})
 
-	err := server.ListenAndServe()
-	helper.ErrorPanic(err)
+	handler := c.Handler(routes)
+	log.Fatal((http.ListenAndServe(port, handler)))
+	http.Handle("/", routes)
+
+	// server := &http.Server{
+	// 	Addr:    port,
+	// 	Handler: routes,
+	// }
+
+	// err := server.ListenAndServe()
+	// helper.ErrorPanic(err)
 }

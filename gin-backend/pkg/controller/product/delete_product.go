@@ -14,7 +14,7 @@ import (
 // @Description		Remove marks data by id.
 // @Produce			application/json
 // @Tags		    marks
-// @Success			200 {object} models.Mark "Mark successfully erased."
+// @Success			200  "Mark successfully erased."
 // @Router			/marks/{id} [delete]
 func DeleteMark(c *gin.Context) {
 	id := c.Param("id")

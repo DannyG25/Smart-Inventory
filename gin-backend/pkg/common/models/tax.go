@@ -1,11 +1,10 @@
 package models
 
+import "gorm.io/gorm"
+
 type Tax struct {
-	Tax_id   int
+	gorm.Model
 	Tax_name string
 	Tax_rate float32
-}
-
-func (Tax) TableNameTax() string {
-	return "Tax"
+	Products []Product
 }

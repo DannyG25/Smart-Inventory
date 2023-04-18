@@ -1,7 +1,10 @@
 package models
 
-type Unit_Measure struct {
-	Uni_id           int
+import "gorm.io/gorm"
+
+type Unit_measure struct {
+	gorm.Model
 	Uni_measure      string
 	Uni_abbreviation string
+	Products         []Product
 }

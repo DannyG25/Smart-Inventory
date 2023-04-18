@@ -12,7 +12,7 @@ import (
 // @Summary			Get All marks.
 // @Description		Return list of marks.
 // @Tags			marks
-// @Success			200 {obejct} models.Mark "Marks recuperadas exitosamente."
+// @Success			200  "Marks successfully recovered."
 // @Router			/marks [get]
 func GetMarks(c *gin.Context) {
 	var Marks []models.Mark

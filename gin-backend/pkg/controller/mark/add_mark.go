@@ -9,7 +9,7 @@ import (
 )
 
 type AddMarkBody struct {
-	models.Mark
+	Mar_name string
 }
 
 // CreateMarks		godoc
@@ -18,7 +18,7 @@ type AddMarkBody struct {
 // @Param			marks body AddMarkBody{} true "Create marks"
 // @Produce			application/json
 // @Tags			marks
-// @Success			200 {object} models.Mark "successfully created mark."
+// @Success			200 {object} AddMarkBody{} "successfully created mark."
 // @Router			/marks [post]
 func AddMark(c *gin.Context) {
 	body := AddMarkBody{}
@@ -29,20 +29,22 @@ func AddMark(c *gin.Context) {
 		return
 	}
 
-	// retrieve last id
-	var lastRecord models.Mark
-	err := db.DB.Table("mark").Last(&lastRecord).Error
-	if err != nil {
-		body.Mar_id = 1
-	} else {
-		body.Mar_id = lastRecord.Mar_id + 1
-	}
+	// // retrieve last id
+	// var lastRecord models.Mark
+	// err := db.DB.Table("mark").Last(&lastRecord).Error
+	// if err != nil {
+	// 	body.Mar_id = 1
+	// } else {
+	// 	body.Mar_id = lastRecord.Mar_id + 1
+	// }
 
 	// Insertion of new record
-	if result := db.DB.Table("mark").Create(&body); result.Error != nil {
+	var Mark models.Mark
+	Mark.Mar_name = body.Mar_name
+	if result := db.DB.Create(&Mark); result.Error != nil {
 		c.AbortWithError(http.StatusNotFound, result.Error)
 		return
 	}
 
-	c.JSON(http.StatusCreated, &body)
+	c.JSON(http.StatusCreated, &Mark)
 }

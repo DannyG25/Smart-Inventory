@@ -1,10 +1,9 @@
 package models
 
-type Mark struct {
-	Mar_id   int
-	Mar_name string
-}
+import "gorm.io/gorm"
 
-func (Mark) TableNameMark() string {
-	return "mark"
+type Mark struct {
+	gorm.Model
+	Mar_name string
+	Products []Product
 }

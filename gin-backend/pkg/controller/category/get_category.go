@@ -14,7 +14,7 @@ import (
 // @Description			Return the category whose catId value matches id.
 // @Produce				application/json
 // @Tags			categories
-// @Success				200 {object} models.Category "Category found successfully."
+// @Success				200 "Category found successfully."
 // @Router				/categories/{id} [get]
 func GetCategory(c *gin.Context) {
 	id := c.Param("id")

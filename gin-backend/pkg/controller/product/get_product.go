@@ -14,7 +14,7 @@ import (
 // @Description			Return the mark whose marId value matches id.
 // @Produce				application/json
 // @Tags			marks
-// @Success				200 {object} models.Mark "Mark found successfully."
+// @Success				200  "Mark found successfully."
 // @Router				/marks/{id} [get]
 func GetMark(c *gin.Context) {
 	id := c.Param("id")

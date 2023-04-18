@@ -1,6 +1,9 @@
 package models
 
+import "gorm.io/gorm"
+
 type Category struct {
-	Cat_id   int
+	gorm.Model
 	Cat_name string
+	Products []Product
 }

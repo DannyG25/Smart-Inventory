@@ -4,17 +4,32 @@ import (
 	"net/http"
 
 	"github.com/gin-backend/pkg/controller/category"
+	"github.com/gin-backend/pkg/controller/company"
 	"github.com/gin-backend/pkg/controller/mark"
 	"github.com/gin-backend/pkg/controller/product"
 	"github.com/gin-backend/pkg/controller/tax"
 	"github.com/gin-backend/pkg/controller/unit_measure"
+	"github.com/gin-backend/pkg/controller/users"
+	"github.com/gin-backend/pkg/middleware"
 	"github.com/gin-gonic/gin"
+
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func Routers() *gin.Engine {
 	router := gin.Default()
+
+	// router.Use(func(c *gin.Context) {
+	// 	c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:4200") // Cambiar a la URL de tu cliente Angular
+	// 	c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+	// 	c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+	// 	c.Writer.Header().Set("Access-Control-Max-Age", "86400")
+	// 	c.Writer.Header().Set("Access-Control-Allow-Credentials", "true") // Habilitar las cookies en las solicitudes
+
+	// 	fmt.Println("Middleware de CORS ejecutándose")
+	// 	c.Next()
+	// })
 
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
@@ -26,6 +41,7 @@ func Routers() *gin.Engine {
 
 	marksRouter := baseRouter.Group("/marks")
 	marksRouter.POST("/", mark.AddMark)
+	// marksRouter.POST("/", middleware.RequireAuth, mark.AddMark)
 	marksRouter.GET("/", mark.GetMarks)
 	marksRouter.GET("/:id", mark.GetMark)
 	marksRouter.PUT("/", mark.UpdateMark)
@@ -58,6 +74,18 @@ func Routers() *gin.Engine {
 	// productsRouter.GET("/:id", product.GetUnit_Measure)
 	// productsRouter.PUT("/", product.UpdateUnit_Measure)
 	// productsRouter.DELETE("/:id", product.DeleteUnit_Measure)
+
+	companiesRouter := baseRouter.Group("/companies")
+	companiesRouter.POST("/", company.AddCompany)
+	// companiesRouter.GET("/", company.GetUnit_Measures)
+	// companiesRouter.GET("/:id", company.GetUnit_Measure)
+	// companiesRouter.PUT("/", company.UpdateUnit_Measure)
+	// companiesRouter.DELETE("/:id", company.DeleteUnit_Measure)
+
+	usersRouter := baseRouter.Group("/users")
+	usersRouter.POST("/", users.AddUser)
+	usersRouter.POST("/login", users.LoginUser)
+	usersRouter.GET("/validate", middleware.RequireAuth, users.Validate)
 
 	return router
 }
