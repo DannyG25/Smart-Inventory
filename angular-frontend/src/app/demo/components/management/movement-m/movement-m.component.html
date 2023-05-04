@@ -1,0 +1,159 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
+            <p-table #dt [value]="movements" [columns]="cols" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['Mov_type']" [rows]="10"
+                [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [(selection)]="selectedMovements" selectionMode="multiple" [rowHover]="true" dataKey="ID">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Manage Movements</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                class="w-full sm:w-auto" />
+
+                        </span>
+                        <div class="my-2">
+                            <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
+                                (click)="openNew()"></button>
+                            <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
+                                (click)="deleteSelectedMovements()"
+                                [disabled]="!selectedMovements || !selectedMovements.length"></button>
+                        </div>
+                    </div>
+
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="ID">Code <p-sortIcon field="ID"></p-sortIcon></th>
+                        <th pSortableColumn="Mov_type">Type <p-sortIcon field="Mov_name"></p-sortIcon></th>
+                        <th pSortableColumn="Mov_description">Description <p-sortIcon field="Mov_rate"></p-sortIcon></th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-movement>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="movement"></p-tableCheckbox>
+                        </td>
+                        <td style="width:14%; min-width:10rem;"><span class="p-column-title">Code</span>
+                            {{movement.ID}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Type</span>
+                            {{movement.Mov_type}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Description</span>
+                            {{movement.Mov_description}}
+                        </td>
+                        
+                       
+
+                        <td>
+                            <div class="flex">
+                                <button pButton pRipple icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-success mr-2"
+                                    (click)="editMovement(movement)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                                    (click)="deleteMovement(movement)"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <p-dialog [(visible)]="movementDialog" [style]="{width: '450px'}" header="Movement Details" [modal]="true" class="p-fluid">
+            <ng-template pTemplate="content">
+
+                
+
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="type">Type</label>
+                        <input type="text" pInputText id="type" [(ngModel)]="movement.Mov_type"  />
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !movement.Mov_type">Type is required.</small>
+                    </div>
+                    <div class="field col">
+                        <label for="description">Description</label>
+                        <input type="text" pInputText  id="description" [(ngModel)]="movement.Mov_description"/>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !movement.Mov_description">Description is required.</small>
+                    </div>
+                </div>      
+
+
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                    (click)="hideDialog()"></button>
+                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                    (click)="saveMovement()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="editMovementDialog" [style]="{width: '450px'}" header="Movement Details" [modal]="true"
+            class="p-fluid">
+            <ng-template pTemplate="content">
+
+                
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="type">Type</label>
+                        <input type="text" pInputText id="type" [(ngModel)]="movement.Mov_type"  />
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !movement.Mov_type">type is required.</small>
+                    </div>
+                    <div class="field col">
+                        <label for="description">Description</label>
+                        <input type="text" pInputText  id="description" [(ngModel)]="movement.Mov_description"/>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !movement.Mov_description">Description is required.</small>
+                    </div>
+                </div>
+                
+                
+
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                    (click)="hideDialog()"></button>
+                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                    (click)="saveEditMovement()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteMovementDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span *ngIf="movement">Are you sure you want to delete <b>{{movement.Mov_name}}</b>?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                    (click)="deleteMovementDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                    (click)="confirmDelete()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteMovementsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span>Are you sure you want to delete selected movements?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                    (click)="deleteMovementsDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                    (click)="confirmDeleteSelected()"></button>
+            </ng-template>
+        </p-dialog>
+    </div>
+</div>

@@ -5,7 +5,9 @@ import (
 
 	"github.com/gin-backend/pkg/controller/category"
 	"github.com/gin-backend/pkg/controller/company"
+	"github.com/gin-backend/pkg/controller/device"
 	"github.com/gin-backend/pkg/controller/mark"
+	"github.com/gin-backend/pkg/controller/movement"
 	"github.com/gin-backend/pkg/controller/product"
 	"github.com/gin-backend/pkg/controller/tax"
 	"github.com/gin-backend/pkg/controller/unit_measure"
@@ -40,8 +42,8 @@ func Routers() *gin.Engine {
 	baseRouter := router.Group("/api")
 
 	marksRouter := baseRouter.Group("/marks")
-	marksRouter.POST("/", mark.AddMark)
-	// marksRouter.POST("/", middleware.RequireAuth, mark.AddMark)
+	//marksRouter.POST("/", mark.AddMark)
+	marksRouter.POST("/", middleware.RequireAuth, mark.AddMark)
 	marksRouter.GET("/", mark.GetMarks)
 	marksRouter.GET("/:id", mark.GetMark)
 	marksRouter.PUT("/", mark.UpdateMark)
@@ -77,15 +79,34 @@ func Routers() *gin.Engine {
 
 	companiesRouter := baseRouter.Group("/companies")
 	companiesRouter.POST("/", company.AddCompany)
-	// companiesRouter.GET("/", company.GetUnit_Measures)
-	// companiesRouter.GET("/:id", company.GetUnit_Measure)
-	// companiesRouter.PUT("/", company.UpdateUnit_Measure)
-	// companiesRouter.DELETE("/:id", company.DeleteUnit_Measure)
+	companiesRouter.GET("/", company.GetCompanies)
+	companiesRouter.GET("/:id", company.GetCompany)
+	companiesRouter.PUT("/", company.UpdateCompany)
+	companiesRouter.DELETE("/:id", company.DeleteCompany)
 
 	usersRouter := baseRouter.Group("/users")
 	usersRouter.POST("/", users.AddUser)
+	usersRouter.GET("/", users.GetUsers)
+	// usersRouter.GET("/:id", users.Get)
+	usersRouter.PUT("/", users.UpdateUser)
+	usersRouter.DELETE("/:id", users.DeleteUser)
 	usersRouter.POST("/login", users.LoginUser)
 	usersRouter.GET("/validate", middleware.RequireAuth, users.Validate)
+
+	devicesRouter := baseRouter.Group("/devices")
+	devicesRouter.POST("/", device.AddDevice)
+	devicesRouter.GET("/", device.GetDevices)
+	devicesRouter.GET("/:id", device.GetDevice)
+	devicesRouter.GET("/devicesid/:id", device.GetDevicesID)
+	devicesRouter.PUT("/", device.UpdateDevice)
+	devicesRouter.DELETE("/:id", device.DeleteDevice)
+
+	movementsRouter := baseRouter.Group("/movements")
+	movementsRouter.POST("/", movement.AddMovement)
+	movementsRouter.GET("/", movement.GetMovements)
+	movementsRouter.GET("/:id", movement.GetMovement)
+	movementsRouter.PUT("/", movement.UpdateMovement)
+	movementsRouter.DELETE("/:id", movement.DeleteMovement)
 
 	return router
 }

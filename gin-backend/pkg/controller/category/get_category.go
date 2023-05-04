@@ -21,7 +21,7 @@ func GetCategory(c *gin.Context) {
 
 	var Category models.Category
 
-	if result := db.DB.Table("category").First(&Category, id); result.Error != nil {
+	if result := db.DB.Preload("Products").Where("id  = ?", id).First(&Category); result.Error != nil {
 		c.AbortWithError(http.StatusNotFound, result.Error)
 		return
 	}

@@ -21,11 +21,16 @@ func DeleteCategory(c *gin.Context) {
 
 	var Category models.Category
 
-	if result := db.DB.Table("category").Where("cat_id", id); result.Error != nil {
+	if result := db.DB.First(&Category, id); result.Error != nil {
 		c.AbortWithError(http.StatusNotFound, result.Error)
 		return
 	}
-	if err := db.DB.Table("category").Model(&Category).Where("cat_id", id).Delete(&Category).Error; err != nil {
+	// if err := db.DB.Delete(&Category).Error; err != nil {
+	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete record"})
+	// 	return
+	// }
+
+	if err := db.DB.Unscoped().Where("id = ?", id).Delete(&Category).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete record"})
 		return
 	}

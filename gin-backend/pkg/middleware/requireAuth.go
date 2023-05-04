@@ -15,8 +15,8 @@ import (
 func RequireAuth(c *gin.Context) {
 
 	//get the cookie off req
-	tokenString, err := c.Cookie("Authorization")
-	if err != nil {
+	tokenString := c.Request.Header.Get("Authorization")
+	if tokenString == "" {
 		c.AbortWithStatus(http.StatusUnauthorized)
 	}
 
@@ -24,7 +24,7 @@ func RequireAuth(c *gin.Context) {
 
 	// Parse takes the token string and a function for looking up the key. The latter is especially
 
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+	token, _ := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}

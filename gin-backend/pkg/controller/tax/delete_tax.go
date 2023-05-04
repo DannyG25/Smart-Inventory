@@ -21,11 +21,16 @@ func DeleteTax(c *gin.Context) {
 
 	var Tax models.Tax
 
-	if result := db.DB.Table("tax").Where("tax_id", id); result.Error != nil {
+	if result := db.DB.First(&Tax, id); result.Error != nil {
 		c.AbortWithError(http.StatusNotFound, result.Error)
 		return
 	}
-	if err := db.DB.Table("tax").Model(&Tax).Where("tax_id", id).Delete(&Tax).Error; err != nil {
+	// if err := db.DB.Delete(&Tax).Error; err != nil {
+	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete record"})
+	// 	return
+	// }
+
+	if err := db.DB.Unscoped().Where("id = ?", id).Delete(&Tax).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete record"})
 		return
 	}

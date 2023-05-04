@@ -10,6 +10,7 @@ import { HttpEvent, HttpHandler, HttpRequest, HttpResponse, HttpErrorResponse, H
 })
 export class AuthInterceptorService {
 
+  private token: string | null = null;
   constructor(
     private router: Router,
     private _auth: AuthenticationService
@@ -24,9 +25,12 @@ export class AuthInterceptorService {
     if (!request.headers.has('Content-Type')) {
       request = request.clone({ headers: request.headers.set('Content-Type', 'application/json') });
     }
+
+    
+
     request = request.clone({ headers: request.headers.set('Accept', 'application/json') }).clone({
       setHeaders: {
-        Authorization: this._auth.getCookie(),
+        Authorization: `${this._auth.getToken()}`
         
       }
     });

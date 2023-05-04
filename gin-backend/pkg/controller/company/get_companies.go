@@ -17,7 +17,7 @@ import (
 func GetCompanies(c *gin.Context) {
 	var Companies []models.Company
 
-	if result := db.DB.Table("company").Find(&Companies); result.Error != nil {
+	if result := db.DB.Table("companies").Find(&Companies); result.Error != nil {
 		c.AbortWithError(http.StatusNotFound, result.Error)
 		return
 	}

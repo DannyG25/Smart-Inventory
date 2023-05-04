@@ -12,11 +12,11 @@ import (
 type AddUserBody struct {
 	User_username       string
 	User_password       string
-	User_identification int
+	User_identification string
 	User_names          string
 	User_lastnames      string
 	User_address        string
-	User_phone          int
+	User_phone          string
 	Company_id          *uint
 }
 

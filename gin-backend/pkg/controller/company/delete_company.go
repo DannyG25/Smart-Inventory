@@ -21,11 +21,11 @@ func DeleteCompany(c *gin.Context) {
 
 	var Company models.Company
 
-	if result := db.DB.Table("company").Where("comp_id", id); result.Error != nil {
+	if result := db.DB.First(&Company, id); result.Error != nil {
 		c.AbortWithError(http.StatusNotFound, result.Error)
 		return
 	}
-	if err := db.DB.Table("company").Model(&Company).Where("comp_id", id).Delete(&Company).Error; err != nil {
+	if err := db.DB.Delete(&Company).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete record"})
 		return
 	}

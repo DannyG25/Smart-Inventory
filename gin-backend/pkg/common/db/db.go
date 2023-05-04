@@ -35,15 +35,13 @@ func Init() {
 		&models.Device{},
 		&models.Inventory_detail{},
 		&models.Inventory_header{},
-		&models.Mark{},
-		&models.Menu{},
 		&models.Product{},
 		&models.Transaction{},
 		&models.Transaction_detail{},
 		&models.Binnacle{},
-		&models.Users{},
 		&models.Rol{},
-		&models.Users_Rol{},
+		&models.Users{},
+		&models.Menu{},
 		&models.Rol_menu{},
 	)
 	if error != nil {

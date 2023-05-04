@@ -27,7 +27,7 @@ export class AppTopBarComponent {
         ) { }
 
     logOut(){
-        this._aut.clearCookies();
+        this._aut.clearLocalStorage();
         this.router.navigate(['/login']);
     }
     log(){

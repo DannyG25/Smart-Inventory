@@ -1,10 +1,20 @@
 package company
 
 import (
+	"net/http"
+
+	"github.com/gin-backend/pkg/common/db"
+	"github.com/gin-backend/pkg/common/models"
 	"github.com/gin-gonic/gin"
 )
 
 type AddCompanyBody struct {
+	Comp_name    string
+	Comp_address string
+	Comp_phone   string
+	Comp_ruc     string
+	Comp_mail    string
+	CompanyID    *uint
 }
 
 // CreateCompanies	godoc
@@ -16,13 +26,13 @@ type AddCompanyBody struct {
 // @Success			200 {object} AddCompanyBody{} "successfully created company."
 // @Router			/companies [post]
 func AddCompany(c *gin.Context) {
-	// body := AddCompanyBody{}
+	body := AddCompanyBody{}
 
-	// //Check data in json format
-	// if err := c.BindJSON(&body); err != nil {
-	// 	c.AbortWithError(http.StatusBadRequest, err)
-	// 	return
-	// }
+	//Check data in json format
+	if err := c.BindJSON(&body); err != nil {
+		c.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
 
 	// // retrieve last id
 	// var lastRecord models.Company
@@ -45,11 +55,19 @@ func AddCompany(c *gin.Context) {
 	// 	body.Comp_comp = nil
 	// }
 
-	// // Insertion of new record
-	// if result := db.DB.Table("company").Create(&body); result.Error != nil {
-	// 	c.AbortWithError(http.StatusNotFound, result.Error)
-	// 	return
-	// }
+	// Insertion of new record
+	var Company models.Company
+	Company.Comp_name = body.Comp_name
+	Company.Comp_address = body.Comp_address
+	Company.Comp_phone = body.Comp_phone
+	Company.Comp_ruc = body.Comp_ruc
+	Company.Comp_mail = body.Comp_mail
+	Company.CompanyID = body.CompanyID
 
-	// c.JSON(http.StatusCreated, &body)
+	if result := db.DB.Create(&Company); result.Error != nil {
+		c.AbortWithError(http.StatusNotFound, result.Error)
+		return
+	}
+
+	c.JSON(http.StatusCreated, &body)
 }

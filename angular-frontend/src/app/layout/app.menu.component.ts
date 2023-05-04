@@ -21,6 +21,22 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
+                label: 'Administrator',
+                items: [
+                    { label: 'Companies', icon: 'pi pi-fw pi-home', routerLink: ['/administrator/company-crud'] }
+                ]
+            },
+            {
+                label: 'Managament',
+                items: [
+                    { label: 'Location', icon: 'pi pi-fw pi-home', routerLink: ['/management/location'] },
+                    { label: 'employee', icon: 'pi pi-fw pi-home', routerLink: ['/management/employee'] },
+                    { label: 'device', icon: 'pi pi-fw pi-home', routerLink: ['/management/device'] },
+                    { label: 'tax', icon: 'pi pi-fw pi-home', routerLink: ['/management/tax'] },
+                    { label: 'category', icon: 'pi pi-fw pi-home', routerLink: ['/management/category'] },
+                ]
+            },
+            {
                 label: 'UI Components',
                 items: [
                     { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
@@ -39,20 +55,6 @@ export class AppMenuComponent implements OnInit {
                     { label: 'File', icon: 'pi pi-fw pi-file', routerLink: ['/uikit/file'] },
                     { label: 'Chart', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/uikit/charts'] },
                     { label: 'Misc', icon: 'pi pi-fw pi-circle', routerLink: ['/uikit/misc'] }
-                ]
-            },
-            {
-                label: 'Prime Blocks',
-                items: [
-                    { label: 'Free Blocks', icon: 'pi pi-fw pi-eye', routerLink: ['/blocks'], badge: 'NEW' },
-                    { label: 'All Blocks', icon: 'pi pi-fw pi-globe', url: ['https://www.primefaces.org/primeblocks-ng'], target: '_blank' },
-                ]
-            },
-            {
-                label: 'Utilities',
-                items: [
-                    { label: 'PrimeIcons', icon: 'pi pi-fw pi-prime', routerLink: ['/utilities/icons'] },
-                    { label: 'PrimeFlex', icon: 'pi pi-fw pi-desktop', url: ['https://www.primefaces.org/primeflex/'], target: '_blank' },
                 ]
             },
             {
@@ -89,6 +91,16 @@ export class AppMenuComponent implements OnInit {
                         label: 'Crud',
                         icon: 'pi pi-fw pi-pencil',
                         routerLink: ['/pages/crud']
+                    },
+                    {
+                        label: 'Mark',
+                        icon: 'pi pi-fw pi-pencil',
+                        routerLink: ['/pages/mark']
+                    },
+                    {
+                        label: 'Company',
+                        icon: 'pi pi-fw pi-globe',
+                        routerLink: ['/pages/company']
                     },
                     {
                         label: 'Timeline',

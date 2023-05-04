@@ -11,6 +11,7 @@ import { AuthenticationService } from 'src/app/demo/service/authentication.servi
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
+    providers: [MessageService],
     styles: [`
         :host ::ng-deep .pi-eye,
         :host ::ng-deep .pi-eye-slash {
@@ -24,7 +25,7 @@ export class LoginComponent {
     form!: FormGroup;
 
     valCheck: string[] = ['remember'];
-
+    msgs: MessageService[] = [];
     password!: string;
 
     constructor(
@@ -34,7 +35,7 @@ export class LoginComponent {
         private router: Router,
         private cookieService: CookieService,
         public fb: FormBuilder,
-        // private messageService: MessageService
+        private messageService: MessageService
     ) { }
 
     ngOnInit(): void {
@@ -47,21 +48,18 @@ export class LoginComponent {
 
     login() {
         let b = this.form.value
-        console.log(b)
+        
         this._api.postTypeRequest('users/login', b).subscribe((res: any) => {
-            console.log(res)
+            
             if (res) {
-                console.log(res.token)
-                this._auth.setDataInCookie('Authorization',res.token)
-                // const cookieValue = res.headers.get('Authorization');
-                // console.log(cookieValue)
-                // document.cookie = cookieValue;
+                this._auth.setDataInLocalStorage('Authorization',res.token)
+                
                 this.router.navigate(['/dashboard']);
             }
+
         }, (err: any) => {
-            console.log(err)
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Incorrect Email or Password', life: 3000 });
             this.form.reset();
-            // this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
 
         });
     }

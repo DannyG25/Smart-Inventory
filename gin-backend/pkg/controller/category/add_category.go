@@ -1,6 +1,10 @@
 package category
 
 import (
+	"net/http"
+
+	"github.com/gin-backend/pkg/common/db"
+	"github.com/gin-backend/pkg/common/models"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,28 +21,22 @@ type AddCategoryBody struct {
 // @Success			200 {object} AddCategoryBody{} "successfully created category."
 // @Router			/categories [post]
 func AddCategory(c *gin.Context) {
-	// body := AddCategoryBody{}
+	body := AddCategoryBody{}
+	var Category models.Category
+	//Check data in json format
+	if err := c.BindJSON(&body); err != nil {
+		c.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
 
-	// //Check data in json format
-	// if err := c.BindJSON(&body); err != nil {
-	// 	c.AbortWithError(http.StatusBadRequest, err)
-	// 	return
-	// }
+	// Insertion of new record
 
-	// // retrieve last id
-	//var lastRecord models.Category
-	// err := db.DB.Table("category").Last(&lastRecord).Error
-	// if err != nil {
-	// 	body.Cat_id = 1
-	// } else {
-	// 	body.Cat_id = lastRecord.Cat_id + 1
-	// }
+	Category.Cat_name = body.Cat_name
 
-	// // Insertion of new record
-	// if result := db.DB.Table("category").Create(&body); result.Error != nil {
-	// 	c.AbortWithError(http.StatusNotFound, result.Error)
-	// 	return
-	// }
+	if result := db.DB.Create(&Category); result.Error != nil {
+		c.AbortWithError(http.StatusNotFound, result.Error)
+		return
+	}
 
-	// c.JSON(http.StatusCreated, &body)
+	c.JSON(http.StatusCreated, &body)
 }

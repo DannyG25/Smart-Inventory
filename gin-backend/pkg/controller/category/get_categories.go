@@ -17,7 +17,7 @@ import (
 func GetCategories(c *gin.Context) {
 	var Categorys []models.Category
 
-	if result := db.DB.Table("category").Find(&Categorys); result.Error != nil {
+	if result := db.DB.Find(&Categorys); result.Error != nil {
 		c.AbortWithError(http.StatusNotFound, result.Error)
 		return
 	}

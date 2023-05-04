@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Customer, Representative } from 'src/app/demo/api/customer';
 import { CustomerService } from 'src/app/demo/service/customer.service';
-import { Product } from 'src/app/demo/api/product';
+import { Product } from 'src/app/demo/api/products';
 import { ProductService } from 'src/app/demo/service/product.service';
 import { Table } from 'primeng/table';
 import { MessageService, ConfirmationService } from 'primeng/api';
@@ -43,6 +43,8 @@ export class TableDemoComponent implements OnInit {
     idFrozen: boolean = false;
 
     loading: boolean = true;
+
+    rowsPerPageOptions = [5, 10, 20];
 
     @ViewChild('filter') filter!: ElementRef;
 
@@ -134,5 +136,6 @@ export class TableDemoComponent implements OnInit {
         table.clear();
         this.filter.nativeElement.value = '';
     }
+    
     
 }

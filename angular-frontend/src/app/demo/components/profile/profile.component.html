@@ -1,0 +1,31 @@
+<div class="grid">
+	
+
+	<div class="col-12">
+		<div class="card">
+			<h5>Profile</h5>
+			<div class="p-fluid p-formgrid grid">
+				<div class="field col-12 md:col-6">
+					<label htmlFor="names">Firstname</label>
+					<input pInputText id="names" disabled value="{{UserData?.User_names}}" type="text" />
+				</div>
+				<div class="field col-12 md:col-6">
+					<label htmlFor="lastnames">Lastname</label>
+					<input pInputText id="lastnames" disabled value="{{UserData?.User_lastnames}}" type="text" />
+				</div>
+				<div class="field col-12 md:col-6">
+					<label htmlFor="address">Address</label>
+					<input pInputTextarea id="address" disabled value="{{UserData?.User_address}}" type="text" />
+				</div>
+				<div class="field col-12 md:col-6">
+					<label htmlFor="identification">Identification</label>
+					<input pInputText id="identification" disabled value="{{UserData?.User_identification}}" type="text" />
+				</div>
+				<div class="field col-12 md:col-3">
+					<label htmlFor="phone">Phone Number</label>
+					<input pInputText id="phone" disabled value="{{UserData?.User_phone}}" type="text" />
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

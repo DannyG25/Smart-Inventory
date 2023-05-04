@@ -21,7 +21,7 @@ func GetTax(c *gin.Context) {
 
 	var Tax models.Tax
 
-	if result := db.DB.Table("tax").First(&Tax, id); result.Error != nil {
+	if result := db.DB.Preload("Products").Where("id  = ?", id).First(&Tax); result.Error != nil {
 		c.AbortWithError(http.StatusNotFound, result.Error)
 		return
 	}

@@ -29,28 +29,34 @@ export class ApiService {
       return res;
     }));
   }
+  getAllByIdTypeRequest(url: string,id:number) {
+    console.log(this.REST_API_SERVER+url);
+    return this.httpClient.get(this.REST_API_SERVER+url+'/'+id,{ withCredentials: true }).pipe(map(res => {
+      return res;
+    }));
+  }
 
   getByIdTypeRequest(url: string, id:number) {
     console.log(this.REST_API_SERVER+url);
-    return this.httpClient.get(this.REST_API_SERVER+url+'/'+id).pipe(map(res => {
+    return this.httpClient.get(this.REST_API_SERVER+url+'/'+id,{ withCredentials: true }).pipe(map(res => {
       return res;
     }));
   }
 
   postTypeRequest(url: string, payload: any) {
-    return this.httpClient.post(this.REST_API_SERVER+url, payload).pipe(map(res => {
+    return this.httpClient.post(this.REST_API_SERVER+url, payload,{ withCredentials: true }).pipe(map(res => {
       return res;
     }));
   }
 
   putTypeRequest(url: string, payload: any) {
-    return this.httpClient.put(this.REST_API_SERVER+url, payload).pipe(map(res => {
+    return this.httpClient.put(this.REST_API_SERVER+url, payload,{ withCredentials: true }).pipe(map(res => {
       return res;
     }))
   }
 
-  deleteTypeRequest(url: string, payload: any) {
-    return this.httpClient.delete(this.REST_API_SERVER+url, payload).pipe(map(res => {
+  deleteTypeRequest(url: string, id?: number) {
+    return this.httpClient.delete(this.REST_API_SERVER+url+'/'+id,{ withCredentials: true }).pipe(map(res => {
       return res;
     }))
   }

@@ -6,11 +6,11 @@ type Company struct {
 	gorm.Model
 	Comp_name         string
 	Comp_address      string
-	Comp_phone        int
-	Comp_ruc          int
+	Comp_phone        string
+	Comp_ruc          string
 	Comp_mail         string
-	CompanyID         *int
-	Children_comp     []Company
+	CompanyID         *uint
+	Children_comp     []*Company `gorm:"foreignKey:CompanyID"`
 	Parent_comp       *Company
 	Company_details   []Company_detail
 	Devices           []Device

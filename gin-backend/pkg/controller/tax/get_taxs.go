@@ -17,7 +17,7 @@ import (
 func GetTaxs(c *gin.Context) {
 	var Taxs []models.Tax
 
-	if result := db.DB.Table("tax").Find(&Taxs); result.Error != nil {
+	if result := db.DB.Find(&Taxs); result.Error != nil {
 		c.AbortWithError(http.StatusNotFound, result.Error)
 		return
 	}
