@@ -1,0 +1,195 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
+            <p-table #dt [value]="binnacles" [columns]="cols" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['Bin_description']" [rows]="10"
+                [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [(selection)]="selectedBinnacles" selectionMode="multiple" [rowHover]="true" dataKey="ID">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Manage Binnacles</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                class="w-full sm:w-auto" />
+
+                        </span>
+                        <div class="my-2">
+                            <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
+                                (click)="openNew()"></button>
+                            <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
+                                (click)="deleteSelectedBinnacles()"
+                                [disabled]="!selectedBinnacles || !selectedBinnacles.length"></button>
+                        </div>
+                    </div>
+
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="ID">Code <p-sortIcon field="ID"></p-sortIcon></th>
+                        <th pSortableColumn="Bin_description">Description <p-sortIcon field="Bin_antenna"></p-sortIcon></th>
+                        <th pSortableColumn="Bin_latitude">latitude <p-sortIcon field="Bin_latitude"></p-sortIcon></th>
+                        <th pSortableColumn="Bin_lenght">Lenght <p-sortIcon field="Bin_lenght"></p-sortIcon></th>
+                        <!-- <th >Latitude </th>
+                        <th >Lenght </th>
+                        <th >Description</th> -->
+                        <!-- <th pSortableColumn="Bin_address">Address <p-sortIcon field="Bin_address"></p-sortIcon></th>
+                        <th pSortableColumn="Bin_binnaclename">Binnaclename<p-sortIcon field="Bin_binnaclename"></p-sortIcon></th> -->
+                        <!-- <th></th> -->
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-binnacle>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="binnacle"></p-tableCheckbox>
+                        </td>
+                        <td style="width:14%; min-width:10rem;"><span class="p-column-title">Code</span>
+                            {{binnacle.ID}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Description</span>
+                            {{binnacle.Bin_description}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Latitude</span>
+                            {{binnacle.Bin_latitude}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Lenght</span>
+                            {{binnacle.Bin_lenght}}
+                        </td>
+                       
+                        <!-- <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Address</span>
+                            {{binnacle.Bin_address}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Binnaclename</span>
+                            {{binnacle.Bin_binnaclename}}
+                        </td> -->
+                       
+
+                        <td>
+                            <div class="flex">
+
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2"
+                                    (click)="deleteBinnacle(binnacle)"></button>
+                                </div> 
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <p-dialog [(visible)]="binnacleDialog" [style]="{width: '450px'}" header="Binnacle Details" [modal]="true" class="p-fluid">
+            <ng-template pTemplate="content">
+
+                <div class="field">
+                    <label for="description">Description Binnacle</label>
+                    <input type="text" pInputText id="description" [(ngModel)]="binnacle.Bin_description"  />
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !binnacle.Bin_description">Address is required.</small>
+                </div>
+
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="lenght">Lenght</label>
+                        <!-- <input type="text" pInputText id="length" [(ngModel)]="binnacle.Bin_length"  /> -->
+                        <p-inputNumber format="decimal" [minFractionDigits]="6" [maxFractionDigits]="6" id="lenght" [(ngModel)]="binnacle.Bin_lenght"></p-inputNumber>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !binnacle.Bin_lenght ">Names is required.</small>
+                    </div>
+                    <div class="field col">
+                        <label for="latitude">Latitude</label>
+                        <!-- <input type="text" pInputText id="latitude" [(ngModel)]="binnacle.Bin_latitude " /> -->
+                        <p-inputNumber format="decimal" [minFractionDigits]="6" [maxFractionDigits]="6"  id="latitude" [(ngModel)]="binnacle.Bin_latitude"></p-inputNumber>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !binnacle.Bin_latitude ">Lastnames is required.</small>
+                    </div>
+                </div>
+               
+                
+                <!-- <div class="field">
+                    <label for="binnacleID">Main Binnacle ID</label>
+                    <p-inputNumber id="binnacleID" [(ngModel)]="binnacle.BinnacleID"></p-inputNumber>
+                    
+                </div> -->
+               
+
+
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                    (click)="hideDialog()"></button>
+                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                    (click)="saveBinnacle()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="editBinnacleDialog" [style]="{width: '450px'}" header="Binnacle Details" [modal]="true"
+            class="p-fluid">
+            <ng-template pTemplate="content">
+
+                <div class="field">
+                    <label for="description">Description Binnacle</label>
+                    <input type="text" pInputText id="description" [(ngModel)]="binnacle.Bin_description"  />
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !binnacle.Bin_description">Address is required.</small>
+                </div>
+
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="lenght">Lenght</label>
+                        <!-- <input type="text" pInputText id="length" [(ngModel)]="binnacle.Bin_length"  /> -->
+                        <p-inputNumber format="decimal" [minFractionDigits]="6" [maxFractionDigits]="6" id="lenght" [(ngModel)]="binnacle.Bin_lenght"></p-inputNumber>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !binnacle.Bin_lenght ">Names is required.</small>
+                    </div>
+                    <div class="field col">
+                        <label for="latitude">Latitude</label>
+                        <!-- <input type="text" pInputText id="latitude" [(ngModel)]="binnacle.Bin_latitude " /> -->
+                        <p-inputNumber format="decimal" [minFractionDigits]="6" [maxFractionDigits]="6"  id="latitude" [(ngModel)]="binnacle.Bin_latitude"></p-inputNumber>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !binnacle.Bin_latitude ">Lastnames is required.</small>
+                    </div>
+                </div>
+                
+
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                    (click)="hideDialog()"></button>
+                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                    (click)="saveEditBinnacle()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteBinnacleDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span *ngIf="binnacle">Are you sure you want to delete <b>{{binnacle.Bin_name}}</b>?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                    (click)="deleteBinnacleDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                    (click)="confirmDelete()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteBinnaclesDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span>Are you sure you want to delete selected binnacles?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                    (click)="deleteBinnaclesDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                    (click)="confirmDeleteSelected()"></button>
+            </ng-template>
+        </p-dialog>
+    </div>
+</div>

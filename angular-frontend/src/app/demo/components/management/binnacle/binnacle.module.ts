@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProductMComponent } from './product-m.component';
-import { ProductMRoutingModule } from './product-m-routing.module';
+import { BinnacleRoutingModule } from './binnacle-routing.module';
 import { FormsModule } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
@@ -19,18 +18,16 @@ import { RippleModule } from 'primeng/ripple';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
-import { CalendarModule } from 'primeng/calendar';
+import { BinnacleComponent } from './binnacle.component';
+
 
 
 @NgModule({
-  declarations: [
-    ProductMComponent
-  ],
+  declarations: [ BinnacleComponent],
   imports: [
     CommonModule,
-    ProductMRoutingModule,
+    BinnacleRoutingModule,
     TableModule,
-    CalendarModule,
     FileUploadModule,
     AutoCompleteModule,
     FormsModule,
@@ -47,6 +44,7 @@ import { CalendarModule } from 'primeng/calendar';
     RadioButtonModule,
     InputNumberModule,
     DialogModule
+
   ]
 })
-export class ProductMModule { }
+export class BinnacleModule { }

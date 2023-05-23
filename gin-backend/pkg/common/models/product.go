@@ -18,7 +18,7 @@ type Product struct {
 	Tax_id              *uint
 	UnitMeasure_id      *uint
 	ProductID           *uint
-	Children_pro        []Product
+	Children_pro        []*Product
 	Parent_pro          *Product
 	Company_details     []Company_detail
 	Inventory_details   []Inventory_detail

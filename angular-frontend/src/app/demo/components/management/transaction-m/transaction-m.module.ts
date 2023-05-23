@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProductMComponent } from './product-m.component';
-import { ProductMRoutingModule } from './product-m-routing.module';
+import { TransactionMRoutingModule } from './transaction-m-routing.module';
 import { FormsModule } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
+import { CalendarModule } from 'primeng/calendar';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { ChipsModule } from 'primeng/chips';
 import { DialogModule } from 'primeng/dialog';
@@ -19,17 +19,19 @@ import { RippleModule } from 'primeng/ripple';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
-import { CalendarModule } from 'primeng/calendar';
+import { TransactionMComponent } from './transaction-m.component';
+import { DividerModule } from 'primeng/divider';
 
 
 @NgModule({
   declarations: [
-    ProductMComponent
+    TransactionMComponent
   ],
   imports: [
     CommonModule,
-    ProductMRoutingModule,
+    TransactionMRoutingModule,
     TableModule,
+    DividerModule,
     CalendarModule,
     FileUploadModule,
     AutoCompleteModule,
@@ -47,6 +49,7 @@ import { CalendarModule } from 'primeng/calendar';
     RadioButtonModule,
     InputNumberModule,
     DialogModule
+
   ]
 })
-export class ProductMModule { }
+export class TransactionMModule { }

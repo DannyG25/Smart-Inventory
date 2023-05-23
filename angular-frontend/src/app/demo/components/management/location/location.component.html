@@ -32,77 +32,63 @@
 
 <div class="grid">
 	<div class="col-12">
-		<div class="card">
+		<div class="card px-6 py-6">
 			<h5>Sub-Companies</h5>
-			<p-table #dt1 [value]="companies" [columns]="cols" dataKey="id" [rows]="10" [loading]="" [rowHover]="true"
-				styleClass="p-datatable-gridlines" [paginator]="true"
-				[globalFilterFields]="['name','country.name','representative.name','status']" responsiveLayout="scroll">
+			<p-table #dt [value]="companies" [columns]="cols" responsiveLayout="scroll" [rows]="10"
+				[globalFilterFields]="['Comp_name','country.Comp_name','representative.Comp_name','status']" [rows]="10"
+				[paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+				currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+				[(selection)]="selectedCompanies" selectionMode="multiple" [rowHover]="true" dataKey="ID">
+				<ng-template pTemplate="caption">
+					<div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+						<h5 class="m-0">Manage Companies</h5>
+
+					</div>
+
+				</ng-template>
 
 				<ng-template pTemplate="header">
 					<tr>
-						<th style="min-width: 12rem">
-							<div class="flex justify-content-between align-items-center">
-								Name
-
-							</div>
+						<th style="width: 3rem">
+							<p-tableHeaderCheckbox (click)="selectCompany()" ></p-tableHeaderCheckbox>
 						</th>
-						<th style="min-width: 12rem">
-							<div class="flex justify-content-between align-items-center">
-								Country
+						<th pSortableColumn="ID">Code <p-sortIcon field="ID"></p-sortIcon></th>
+						<th pSortableColumn="Comp_name">Name <p-sortIcon field="Comp_name"></p-sortIcon></th>
+						<th pSortableColumn="Comp_address">Address <p-sortIcon field="Comp_address"></p-sortIcon></th>
+						<th pSortableColumn="Comp_phone">Phone <p-sortIcon field="Comp_phone"></p-sortIcon></th>
+						<th pSortableColumn="Comp_ruc">RUC <p-sortIcon field="Comp_ruc"></p-sortIcon></th>
+						<th pSortableColumn="Comp_mail">Mail<p-sortIcon field="Comp_mail"></p-sortIcon></th>
 
-							</div>
-						</th>
-
-						<th style="min-width: 10rem">
-							<div class="flex justify-content-between align-items-center">
-								Date
-
-							</div>
-						</th>
-						<th style="min-width: 10rem">
-							<div class="flex justify-content-between align-items-center">
-								Balance
-
-							</div>
-						</th>
-
-
-						<th style="min-width: 8rem">
-							<div class="flex justify-content-between align-items-center">
-								Verified
-
-							</div>
-						</th>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="body" let-company>
 					<tr>
 						<td>
+							<p-tableCheckbox (click)="selectCompany()" [value]="company"></p-tableCheckbox>
+						</td>
+						<td style="width:14%; min-width:10rem;"><span class="p-column-title">Code</span>
+							{{company.ID}}
+						</td>
+						<td style="width:14%; min-width:10rem;">
+							<span class="p-column-title">Name</span>
 							{{company.Comp_name}}
 						</td>
-						<td>
+						<td style="width:14%; min-width:10rem;">
+							<span class="p-column-title">Address</span>
 							{{company.Comp_address}}
 						</td>
-						<td>
-							{{company.Comp_mail}}
-						</td>
-						<td>
-							{{company.Comp_ruc}}
-						</td>
-						<td>
+						<td style="width:14%; min-width:10rem;">
+							<span class="p-column-title">Phone</span>
 							{{company.Comp_phone}}
 						</td>
-
-					</tr>
-				</ng-template>
-				<ng-template pTemplate="emptymessage">
-					<tr>
-						<td colspan="8">No customers found.</td>
-					</tr>
-				</ng-template>
-				<ng-template pTemplate="loadingbody">
-					<tr>
-						<td colspan="8">Loading customers data. Please wait.</td>
+						<td style="width:14%; min-width:10rem;">
+							<span class="p-column-title">RUC</span>
+							{{company.Comp_ruc}}
+						</td>
+						<td style="width:14%; min-width:10rem;">
+							<span class="p-column-title">Mail</span>
+							{{company.Comp_mail}}
+						</td>
 					</tr>
 				</ng-template>
 			</p-table>
@@ -119,7 +105,7 @@
 				<!-- </div> -->
 			</div>
 			<div style="
-            height: 450px; display: flex; align-items: center; justify-content: center; "  id="map">
+            height: 450px; display: flex; align-items: center; justify-content: center; " id="map">
 
 				<a href="https://www.maptiler.com"><img src="https://api.maptiler.com/resources/logo.svg"
 						alt="MapTiler logo" /></a>

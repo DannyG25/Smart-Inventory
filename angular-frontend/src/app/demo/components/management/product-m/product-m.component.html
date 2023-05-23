@@ -1,1 +1,320 @@
-<p>product-m works!</p>
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
+            <p-table #dt [value]="products" [columns]="cols" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['Pro_name']" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]"
+                [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [(selection)]="selectedProducts" selectionMode="multiple" [rowHover]="true" dataKey="ID">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Manage Products</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                class="w-full sm:w-auto" />
+
+                        </span>
+                        <div class="my-2">
+                            <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
+                                (click)="openNew()"></button>
+                            <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
+                                (click)="deleteSelectedProducts()"
+                                [disabled]="!selectedProducts || !selectedProducts.length"></button>
+                        </div>
+                    </div>
+
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="ID">Code <p-sortIcon field="ID"></p-sortIcon></th>
+                        <th pSortableColumn="Pro_name">Name <p-sortIcon field="Pro_name"></p-sortIcon></th>
+                        <th pSortableColumn="Pro_description">Description <p-sortIcon
+                                field="Pro_description"></p-sortIcon></th>
+                        <th pSortableColumn="Pro_price">Price <p-sortIcon field="Pro_price"></p-sortIcon></th>
+                        <th pSortableColumn="Pro_photo">Photo <p-sortIcon field="Pro_photo"></p-sortIcon></th>
+                        <th pSortableColumn="Pro_experydate">Expery Date <p-sortIcon
+                                field="Pro_experydate"></p-sortIcon></th>
+                        <th pSortableColumn="Pro_marca">Marca <p-sortIcon field="Pro_marca"></p-sortIcon></th>
+                        <th pSortableColumn="Pro_name">Category <p-sortIcon field="Pro_name"></p-sortIcon></th>
+                        <th pSortableColumn="Pro_name">Tax <p-sortIcon field="Pro_name"></p-sortIcon></th>
+                        <th pSortableColumn="Pro_name">Unit Measure <p-sortIcon field="Pro_name"></p-sortIcon></th>
+                        <th pSortableColumn="Pro_name">Product ID <p-sortIcon field="Pro_name"></p-sortIcon></th>
+
+
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-product>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="product"></p-tableCheckbox>
+                        </td>
+                        <td style="width:14%; min-width:10rem;"><span class="p-column-title">Code</span>
+                            {{product.ID}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Name</span>
+                            {{product.Pro_name}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Description</span>
+                            {{product.Pro_description}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Price</span>
+                            {{product.Pro_price}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Photo</span>
+                            {{product.Pro_photo}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Expery Date</span>
+                            {{product.Pro_experydate}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Marca</span>
+                            {{product.Pro_marca}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Category</span>
+                            {{product.Category.Cat_name}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Tax</span>
+                            {{product.Tax.Tax_name}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Unit Measure</span>
+                            {{product.Unit_measure.Uni_abbreviation}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Product ID</span>
+                            {{product.ProductID}}
+                        </td>
+
+
+                        <td>
+                            <div class="flex">
+                                <button pButton pRipple icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-success mr-2"
+                                    (click)="editProduct(product)"></button>
+                                <button pButton pRipple icon="pi pi-trash"
+                                    class="p-button-rounded p-button-warning mr-2"
+                                    (click)="deleteProduct(product)"></button>
+                                
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Product Details" [modal]="true"
+            class="p-fluid">
+            <ng-template pTemplate="content">
+
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="name">Name</label>
+                        <input type="text" pInputText id="name" [(ngModel)]="product.Pro_name" />
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !product.Pro_name">Name is
+                            required.</small>
+                    </div>
+                    <div class="field col">
+                        <label for="marca">Marca</label>
+                        <input type="text" pInputText id="marca" [(ngModel)]="product.Pro_marca" />
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !product.Pro_marca">Mark is
+                            required.</small>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="description">Description</label>
+                    <textarea id="description" pInputTextarea [(ngModel)]="product.Pro_description" required rows="3"
+                        cols="20"></textarea>
+                </div>
+
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="status">Category</label>
+                        <p-dropdown [options]="categorysItems" [(ngModel)]="selectedCategory" optionValue="value" placeholder="Select Item"
+                            [virtualScroll]="true" [virtualScrollItemSize]="38"></p-dropdown>
+
+                    </div>
+                    <div class="field col">
+                        <label for="status">Unit Measure</label>
+                        <p-dropdown [options]="unitmeasureItems" [(ngModel)]="selectedUnitmeasure" optionValue="value" placeholder="Select Item"
+                            [virtualScroll]="true" [virtualScrollItemSize]="10"></p-dropdown>
+
+                    </div>
+                </div>
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="status">Tax</label>
+                        <p-dropdown [options]="taxsItems" [(ngModel)]="selectedTax" optionValue="value" placeholder="Select Item"
+                            [virtualScroll]="true" [virtualScrollItemSize]="38"></p-dropdown>
+
+                    </div>
+                    <div class="field col">
+                        <label for="status">Main Product</label>
+                        <p-dropdown [options]="productsItems" [(ngModel)]="selectedProduct" optionValue="value" placeholder="Select Item"
+                            [virtualScroll]="true" [virtualScrollItemSize]="38"></p-dropdown>
+
+                    </div>
+                </div>
+
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="price">Price</label>
+                        <p-inputNumber id="price" [(ngModel)]="product.Pro_price" mode="currency" currency="USD"
+                            locale="en-US"></p-inputNumber>
+                    </div>
+                    
+                </div>
+                <div class="field ">
+                    <label for="experydate">Expery Date</label>
+                    <!-- <p-calendar id="experydate" [(ngModel)]="product.Pro_experydate" [touchUI]="true"
+                        [readonlyInput]="true">
+                    </p-calendar> -->
+                    <p-calendar [(ngModel)]="product.Pro_experydate">
+                        <ng-template pTemplate="date" let-date>
+                            <span >{{date.day}}</span>
+                        </ng-template>
+                    </p-calendar>
+
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !product.Pro_experydate ">Lastnames is
+                        required.</small>
+                </div>
+
+
+
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                    (click)="hideDialog()"></button>
+                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                    (click)="saveProduct()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="editProductDialog" [style]="{width: '450px'}" header="Product Details" [modal]="true"
+            class="p-fluid">
+            <ng-template pTemplate="content">
+
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="name">Name</label>
+                        <input type="text" pInputText id="name" [(ngModel)]="product.Pro_name" />
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !product.Pro_name">Name is
+                            required.</small>
+                    </div>
+                    <div class="field col">
+                        <label for="marca">Marca</label>
+                        <input type="text" pInputText id="marca" [(ngModel)]="product.Pro_marca" />
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !product.Pro_marca">Address is
+                            required.</small>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="description">Description</label>
+                    <textarea id="description" pInputTextarea [(ngModel)]="product.Pro_description" required rows="3"
+                        cols="20"></textarea>
+                </div>
+
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="status">Category</label>
+                        <p-dropdown [options]="categorysItems" [(ngModel)]="selectedCategory" optionValue="value" placeholder="Select Item"
+                            [virtualScroll]="true" [virtualScrollItemSize]="38"></p-dropdown>
+
+                    </div>
+                    <div class="field col">
+                        <label for="status">Unit Measure</label>
+                        <p-dropdown [options]="unitmeasureItems" [(ngModel)]="selectedUnitmeasure" optionValue="value" placeholder="Select Item"
+                            [virtualScroll]="true" [virtualScrollItemSize]="38"></p-dropdown>
+
+                    </div>
+                </div>
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="status">Tax</label>
+                        <p-dropdown [options]="taxsItems" [(ngModel)]="selectedTax" optionValue="value" placeholder="Select Item"
+                            [virtualScroll]="true" [virtualScrollItemSize]="38"></p-dropdown>
+
+                    </div>
+                    <div class="field col">
+                        <label for="status">Main Product</label>
+                        <p-dropdown [options]="productsItems" [(ngModel)]="selectedProduct" optionValue="value" placeholder="Select Item"
+                            [virtualScroll]="true" [virtualScrollItemSize]="38"></p-dropdown>
+
+                    </div>
+                </div>
+
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="price">Price</label>
+                        <p-inputNumber id="price" [(ngModel)]="product.Pro_price" mode="currency" currency="USD"
+                            locale="en-US"></p-inputNumber>
+                    </div>
+                    
+                </div>
+                <div class="field">
+                    <label for="experydate">Expery Date</label>
+                    <!-- <p-calendar id="experydate" [(ngModel)]="product.Pro_experydate" [touchUI]="true"
+                        [readonlyInput]="true"></p-calendar> -->
+                        <p-calendar [(ngModel)]="product.Pro_experydate">
+                            <ng-template pTemplate="date" let-date>
+                                <span >{{date.day}}</span>
+                            </ng-template>
+                        </p-calendar>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !product.Pro_experydate ">Lastnames is
+                        required.</small>
+                </div>
+
+
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                    (click)="hideDialog()"></button>
+                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                    (click)="saveEditProduct()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span *ngIf="product">Are you sure you want to delete <b>{{product.Pro_name}}</b>?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                    (click)="deleteProductDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                    (click)="confirmDelete()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span>Are you sure you want to delete selected products?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                    (click)="deleteProductsDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                    (click)="confirmDeleteSelected()"></button>
+            </ng-template>
+        </p-dialog>
+    </div>
+</div>

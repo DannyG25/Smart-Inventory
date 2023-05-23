@@ -84,7 +84,7 @@
                                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2"
                                     (click)="deleteDevice(device)"></button>
                                 <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-info "
-                                    ></button>
+                                [routerLink]="['/management/binnacle',device.ID]"></button>
                             </div>
                         </td>
                     </tr>

@@ -5,6 +5,7 @@ import { ApiService } from 'src/app/demo/service/api.service';
 import { SelectItem } from 'primeng/api';
 import { Device } from 'src/app/demo/api/device';
 import { Binnacle } from 'src/app/demo/api/binnacle';
+import { Router } from '@angular/router';
 @Component({
   providers: [MessageService],
   templateUrl: './device-m.component.html',
@@ -37,6 +38,7 @@ export class DeviceMComponent {
   constructor(
     private _api: ApiService,
     private messageService: MessageService,
+    private router: Router
 
   ) { }
 
@@ -93,6 +95,9 @@ export class DeviceMComponent {
   deleteDevice(device: Device) {
     this.deleteDeviceDialog = true;
     this.device = { ...device };
+  }
+  viewBinnacles(device: Device){
+    this.router.navigate(['/management/binnacle'], { queryParams: { id: device.ID } });
   }
 
   confirmDeleteSelected() {

@@ -8,24 +8,25 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// DeleteMarks		godoc
-// @Summary			Delete marks
-// @Param			id path string true "get marks by id"
-// @Description		Remove marks data by id.
+// DeleteProducts		godoc
+// @Summary			Delete products
+// @Param			id path string true "get products by id"
+// @Description		Remove products data by id.
 // @Produce			application/json
-// @Tags		    marks
-// @Success			200  "Mark successfully erased."
-// @Router			/marks/{id} [delete]
-func DeleteMark(c *gin.Context) {
+// @Tags		    products
+// @Success			200  "Product successfully erased."
+// @Router			/products/{id} [delete]
+func DeleteProduct(c *gin.Context) {
 	id := c.Param("id")
 
-	var Mark models.Mark
+	var Product models.Product
 
-	if result := db.DB.Table("mark").Where("mar_id", id); result.Error != nil {
+	if result := db.DB.First(&Product, id); result.Error != nil {
 		c.AbortWithError(http.StatusNotFound, result.Error)
 		return
 	}
-	if err := db.DB.Table("mark").Model(&Mark).Where("mar_id", id).Delete(&Mark).Error; err != nil {
+
+	if err := db.DB.Delete(&Product).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete record"})
 		return
 	}

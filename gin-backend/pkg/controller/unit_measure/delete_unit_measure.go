@@ -1,6 +1,10 @@
 package unit_measure
 
 import (
+	"net/http"
+
+	"github.com/gin-backend/pkg/common/db"
+	"github.com/gin-backend/pkg/common/models"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,18 +17,18 @@ import (
 // @Success			200  "Unit_Measure successfully erased."
 // @Router			/unit_measures/{id} [delete]
 func DeleteUnit_Measure(c *gin.Context) {
-	// id := c.Param("id")
+	id := c.Param("id")
 
-	// var Unit_Measure models.Unit_measure
+	var Unit_Measure models.Unit_measure
 
-	// if result := db.DB.Table("unit_measure").Where("uni_id", id); result.Error != nil {
-	// 	c.AbortWithError(http.StatusNotFound, result.Error)
-	// 	return
-	// }
-	// if err := db.DB.Table("unit_measure").Model(&Unit_Measure).Where("uni_id", id).Delete(&Unit_Measure).Error; err != nil {
-	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete record"})
-	// 	return
-	// }
+	if result := db.DB.First(&Unit_Measure, id); result.Error != nil {
+		c.AbortWithError(http.StatusNotFound, result.Error)
+		return
+	}
+	if err := db.DB.Unscoped().Where("id = ?", id).Delete(&Unit_Measure).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete record"})
+		return
+	}
 
-	// c.Status(http.StatusOK)
+	c.Status(http.StatusOK)
 }

@@ -3,6 +3,7 @@ package router
 import (
 	"net/http"
 
+	"github.com/gin-backend/pkg/controller/binnacle"
 	"github.com/gin-backend/pkg/controller/category"
 	"github.com/gin-backend/pkg/controller/company"
 	"github.com/gin-backend/pkg/controller/device"
@@ -72,10 +73,10 @@ func Routers() *gin.Engine {
 
 	productsRouter := baseRouter.Group("/products")
 	productsRouter.POST("/", product.AddProduct)
-	// productsRouter.GET("/", product.GetUnit_Measures)
-	// productsRouter.GET("/:id", product.GetUnit_Measure)
-	// productsRouter.PUT("/", product.UpdateUnit_Measure)
-	// productsRouter.DELETE("/:id", product.DeleteUnit_Measure)
+	productsRouter.GET("/", product.GetProducts)
+	productsRouter.GET("/:id", product.GetProduct)
+	productsRouter.PUT("/", product.UpdateProduct)
+	productsRouter.DELETE("/:id", product.DeleteProduct)
 
 	companiesRouter := baseRouter.Group("/companies")
 	companiesRouter.POST("/", company.AddCompany)
@@ -107,6 +108,14 @@ func Routers() *gin.Engine {
 	movementsRouter.GET("/:id", movement.GetMovement)
 	movementsRouter.PUT("/", movement.UpdateMovement)
 	movementsRouter.DELETE("/:id", movement.DeleteMovement)
+
+	binnaclesRouter := baseRouter.Group("/binnacles")
+	binnaclesRouter.POST("/", binnacle.AddBinnacle)
+	binnaclesRouter.GET("/", binnacle.GetBinnacles)
+	binnaclesRouter.GET("/:id", binnacle.GetBinnacle)
+	binnaclesRouter.GET("/binnaclesid/:id", binnacle.GetBinnaclesID)
+	binnaclesRouter.PUT("/", binnacle.UpdateBinnacle)
+	binnaclesRouter.DELETE("/:id", binnacle.DeleteBinnacle)
 
 	return router
 }

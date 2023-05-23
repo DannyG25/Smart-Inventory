@@ -1,10 +1,16 @@
 package unit_measure
 
 import (
+	"net/http"
+
+	"github.com/gin-backend/pkg/common/db"
+	"github.com/gin-backend/pkg/common/models"
 	"github.com/gin-gonic/gin"
 )
 
 type AddUnit_MeasureBody struct {
+	Uni_measure      string
+	Uni_abbreviation string
 }
 
 // CreateUnit_Measures		godoc
@@ -16,28 +22,23 @@ type AddUnit_MeasureBody struct {
 // @Success			200 {object} AddUnit_MeasureBody{} "successfully created unit_measure."
 // @Router			/unit_measures [post]
 func AddUnit_Measure(c *gin.Context) {
-	// body := AddUnit_MeasureBody{}
+	body := AddUnit_MeasureBody{}
+	var Unit_Measure models.Unit_measure
 
-	// //Check data in json format
-	// if err := c.BindJSON(&body); err != nil {
-	// 	c.AbortWithError(http.StatusBadRequest, err)
-	// 	return
-	// }
+	//Check data in json format
+	if err := c.BindJSON(&body); err != nil {
+		c.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
 
-	// // retrieve last id
-	// var lastRecord models.Unit_Measure
-	// err := db.DB.Table("unit_measure").Last(&lastRecord).Error
-	// if err != nil {
-	// 	body.Uni_id = 1
-	// } else {
-	// 	body.Uni_id = lastRecord.Uni_id + 1
-	// }
+	Unit_Measure.Uni_measure = body.Uni_measure
+	Unit_Measure.Uni_abbreviation = body.Uni_abbreviation
 
-	// // Insertion of new record
-	// if result := db.DB.Table("unit_measure").Create(&body); result.Error != nil {
-	// 	c.AbortWithError(http.StatusNotFound, result.Error)
-	// 	return
-	// }
+	// Insertion of new record
+	if result := db.DB.Create(&Unit_Measure); result.Error != nil {
+		c.AbortWithError(http.StatusNotFound, result.Error)
+		return
+	}
 
-	// c.JSON(http.StatusCreated, &body)
+	c.JSON(http.StatusCreated, &body)
 }

@@ -8,8 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// FindAllDevices 		godoc
-// @Summary			Get All devices.
+// FindAllDevicesById 		godoc
+// @Summary			Get All devices by Id.
 // @Description		Return list of devices.
 // @Tags			devices
 // @Success			200  "Devices successfully recovered."

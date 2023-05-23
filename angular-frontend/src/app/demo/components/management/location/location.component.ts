@@ -11,24 +11,26 @@ import { User } from 'src/app/demo/api/users';
   templateUrl: './location.component.html',
   styleUrls: ['./location.component.scss']
 })
-export class LocationComponent implements OnInit, OnDestroy {
-  map: Map | undefined;
+export class LocationComponent implements OnInit,AfterViewInit, OnDestroy {
+  // map:maplibregl.Map | undefined;
   companies?: Company[] = [];
   company?: Company = {};
   UserData?: User
   devices?: Device[] = [];
   binnacles?: Binnacle[] = []
   binnacle?: Binnacle = {}
+  markers: Marker[] = [];
   cols: any[] = [];
   navigationControl = new NavigationControl({});
-
+  selectedCompanies: Company[] = [];
 
 
   CompanyData?: Company
 
-  @ViewChild('map')
+  @ViewChild('map',{static:false})
   private mapContainer!: ElementRef<HTMLElement>;
 
+  map!: Map;
   constructor(
     private _api: ApiService,
   ) { }
@@ -36,14 +38,29 @@ export class LocationComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.loadCompany();
-    console.log(this.companies)
 
+  }
+  ngAfterViewInit(): void {
+    // this.loadMap;
+    // Create map
+    const initialState = { lng: -79.0045, lat: -2.9005, zoom: 14 };
+    this.map = new Map({
+      container: this.mapContainer.nativeElement,
+      style: 'https://api.maptiler.com/maps/basic-v2/style.json?key=OpfKn1gJGdcklgZ3Fa3E',
+      center: [initialState.lng, initialState.lat],
+      zoom: initialState.zoom
+    });
+    // create controls of map
+    this.map.addControl(this.navigationControl = new NavigationControl({
+      showCompass: true,
+      showZoom: true,
+    }));
   }
 
   loadCompany() {
     this._api.getTypeRequest('users/validate').subscribe((user: any) => {
       this.UserData = user
-      
+
 
       this._api.getByIdTypeRequest('companies', this.UserData?.Company_id ?? 0).subscribe((company: any) => {
         this.CompanyData = company
@@ -54,6 +71,7 @@ export class LocationComponent implements OnInit, OnDestroy {
         ];
         // this.loadLocations();
         this.loadMap()
+        
       }, (err: any) => {
         console.log(err)
 
@@ -67,7 +85,7 @@ export class LocationComponent implements OnInit, OnDestroy {
   }
 
   loadLocations() {
-    
+
     // get locations of company's children
     if (this.companies) {
       for (let company of this.companies) {
@@ -84,72 +102,25 @@ export class LocationComponent implements OnInit, OnDestroy {
 
   loadMap() {
 
-    // Create map
-    const initialState = { lng: -79.0045, lat: -2.9005, zoom: 14 };
-    this.map = new Map({
-      container: this.mapContainer.nativeElement,
-      style: 'https://api.maptiler.com/maps/basic-v2/style.json?key=OpfKn1gJGdcklgZ3Fa3E',
-      center: [initialState.lng, initialState.lat],
-      zoom: initialState.zoom
-    });
-    // create controls of map
-    this.map.addControl(this.navigationControl = new NavigationControl({
-      showCompass: true,
-      showZoom: true,
-    }));
+    
 
     // get locatio of company
     for (let device of this.CompanyData?.Devices ?? []) {
-      for (let binnacle of device.Binnacles ?? []) {
-        this.binnacle = binnacle
+      // for (let binnacle of device.Binnacles ?? []) {
+        let binnacles = device.Binnacles ?? [];
+        this.binnacle = binnacles[binnacles.length - 1];
         console.log(this.binnacle)
         const marker = new Marker({ color: 'red' })
-      .setLngLat([this.binnacle?.Bin_lenght ?? 0, this.binnacle?.Bin_latitude ?? 0])
-      .addTo(this.map);
-    const popup = new Popup({ offset: 25 })
-      .setHTML(`<p>${this.binnacle?.Bin_description}</p>`);
-
-    marker.setPopup(popup);
-    this.binnacle = {}
-      }
-    }
-    // create marker of company
-    
-
-
-    // create markers of company's children
-    if (this.companies) {
-      for (let company of this.companies) {
-        const colorMarker = this.getRandomColor();
-        for (let device of company.Devices ?? []) {
-          for (let binnacle of device.Binnacles ?? []) {
-            this.binnacles?.push(binnacle)
-            const marker = new Marker({ color: colorMarker })
-          .setLngLat([binnacle.Bin_lenght ?? 0, binnacle.Bin_latitude ?? 0])
+          .setLngLat([this.binnacle?.Bin_lenght ?? 0, this.binnacle?.Bin_latitude ?? 0])
           .addTo(this.map);
-
         const popup = new Popup({ offset: 25 })
-          .setHTML(`<p>${binnacle.Bin_description}</p>`);
+          .setHTML(`<p>${this.binnacle?.Bin_description}</p>`);
 
         marker.setPopup(popup);
-          }
-        }
-      }
+        this.binnacle = {}
+      // }
     }
-    // if (this.binnacles) {
-    //   const color = this.getRandomColor();
-    //   for (let entidad of this.binnacles) {
-    //     const marker = new Marker({ color: 'blue' })
-    //       .setLngLat([entidad.Bin_lenght ?? 0, entidad.Bin_latitude ?? 0])
-    //       .addTo(this.map);
-
-    //     const popup = new Popup({ offset: 25 })
-    //       .setHTML(`<p>${entidad.Bin_description}</p>`);
-
-    //     marker.setPopup(popup);
-    //   }
-    // }
-
+    
 
   }
 
@@ -165,4 +136,42 @@ export class LocationComponent implements OnInit, OnDestroy {
     }
     return color;
   }
+
+  selectCompany() {
+    console.log(this.selectedCompanies)
+    console.log("entro")
+    this.clearMarkers(); // Elimina todas las marcas existentes
+  
+    
+      for(const company of this.selectedCompanies){
+        const colorMarker = this.getRandomColor();
+
+        for (const device of company.Devices ?? []) {
+          // for (const binnacle of device.Binnacles ?? []) {
+            let binnacles = device.Binnacles ?? [];
+            let binnacle = binnacles[binnacles.length - 1];
+            const marker = new Marker({ color: colorMarker })
+              .setLngLat([binnacle.Bin_lenght ?? 0, binnacle.Bin_latitude ?? 0])
+              .addTo(this.map);
+    
+            const popup = new Popup({ offset: 25 })
+              .setHTML(`<p>${binnacle.Bin_description}</p>`);
+    
+            marker.setPopup(popup);
+            this.markers.push(marker); // Agrega la marca a la lista de marcas
+          
+        // }
+      }
+      }
+     
+  }
+  
+  clearMarkers() {
+    for (const marker of this.markers) {
+      marker.remove();
+    }
+    this.markers = []; // Limpia la lista de marcas
+  }
+
+  
 }

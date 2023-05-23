@@ -58,6 +58,7 @@ func GetCompany(c *gin.Context) {
 			var logs []models.Binnacle
 			if err := db.DB.Model(&device).Association("Binnacles").Find(&logs); err != nil {
 				// manejar error
+
 			}
 
 			devices[j].Binnacles = logs

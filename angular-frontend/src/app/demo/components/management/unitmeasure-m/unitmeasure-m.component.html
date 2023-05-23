@@ -1,0 +1,159 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
+            <p-table #dt [value]="unit_measures" [columns]="cols" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['Uni_measure']" [rows]="10"
+                [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [(selection)]="selectedUnit_measures" selectionMode="multiple" [rowHover]="true" dataKey="ID">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Manage Unit Measures</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                class="w-full sm:w-auto" />
+
+                        </span>
+                        <div class="my-2">
+                            <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
+                                (click)="openNew()"></button>
+                            <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
+                                (click)="deleteSelectedUnit_measures()"
+                                [disabled]="!selectedUnit_measures || !selectedUnit_measures.length"></button>
+                        </div>
+                    </div>
+
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="ID">Code <p-sortIcon field="ID"></p-sortIcon></th>
+                        <th pSortableColumn="Uni_measure">Name <p-sortIcon field="Uni_measure"></p-sortIcon></th>
+                        <th pSortableColumn="Uni_abbreviation">Rate <p-sortIcon field="Uni_abbreviation"></p-sortIcon></th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-unit_measure>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="unit_measure"></p-tableCheckbox>
+                        </td>
+                        <td style="width:14%; min-width:10rem;"><span class="p-column-title">Code</span>
+                            {{unit_measure.ID}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Measure</span>
+                            {{unit_measure.Uni_measure}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Abbreviation</span>
+                            {{unit_measure.Uni_abbreviation}}
+                        </td>
+                        
+                       
+
+                        <td>
+                            <div class="flex">
+                                <button pButton pRipple icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-success mr-2"
+                                    (click)="editUnit_measure(unit_measure)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                                    (click)="deleteUnit_measure(unit_measure)"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <p-dialog [(visible)]="unit_measureDialog" [style]="{width: '450px'}" header="Unit_measure Details" [modal]="true" class="p-fluid">
+            <ng-template pTemplate="content">
+
+                
+
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="measure">Measure</label>
+                        <input type="text" pInputText id="measure" [(ngModel)]="unit_measure.Uni_measure"  />
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !unit_measure.Uni_measure">Measure is required.</small>
+                    </div>
+                    <div class="field col">
+                        <label for="abbreviation">Abbreviation</label>
+                        <input type="text" pInputText id="abbreviation" [(ngModel)]="unit_measure.Uni_abbreviation"  />
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !unit_measure.Uni_abbreviation">Abbreviation is required.</small>
+                    </div>
+                </div>      
+
+
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                    (click)="hideDialog()"></button>
+                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                    (click)="saveUnit_measure()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="editUnit_measureDialog" [style]="{width: '450px'}" header="Unit_measure Details" [modal]="true"
+            class="p-fluid">
+            <ng-template pTemplate="content">
+
+                
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="measure">Measure</label>
+                        <input type="text" pInputText id="measure" [(ngModel)]="unit_measure.Uni_measure"  />
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !unit_measure.Uni_measure">Measure is required.</small>
+                    </div>
+                    <div class="field col">
+                        <label for="abbreviation">Abbreviation</label>
+                        <input type="text" pInputText id="abbreviation" [(ngModel)]="unit_measure.Uni_abbreviation"  />
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !unit_measure.Uni_abbreviation">Abbreviation is required.</small>
+                    </div>
+                </div>    
+                
+                
+
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                    (click)="hideDialog()"></button>
+                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                    (click)="saveEditUnit_measure()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteUnit_measureDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span *ngIf="unit_measure">Are you sure you want to delete <b>{{unit_measure.Uni_measure}}</b>?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                    (click)="deleteUnit_measureDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                    (click)="confirmDelete()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteUnit_measuresDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span>Are you sure you want to delete selected unit_measures?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                    (click)="deleteUnit_measuresDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                    (click)="confirmDeleteSelected()"></button>
+            </ng-template>
+        </p-dialog>
+    </div>
+</div>

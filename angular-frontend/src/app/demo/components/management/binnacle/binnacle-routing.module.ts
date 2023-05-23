@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { ProductMComponent } from './product-m.component';
+import { BinnacleComponent } from './binnacle.component';
 
 
 
 @NgModule({
   imports: [RouterModule.forChild([
-    { path: '', component: ProductMComponent }
+    { path: '', component: BinnacleComponent }
   ])],
   exports: [RouterModule]
 }) 
-export class ProductMRoutingModule { }
+export class BinnacleRoutingModule { }

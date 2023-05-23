@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { ProductMComponent } from './product-m.component';
+import { UnitmeasureMComponent } from './unitmeasure-m.component';
 
 
 
 @NgModule({
   imports: [RouterModule.forChild([
-    { path: '', component: ProductMComponent }
+    { path: '', component: UnitmeasureMComponent }
   ])],
   exports: [RouterModule]
 }) 
-export class ProductMRoutingModule { }
+export class UnitmeasureMRoutingModule { }

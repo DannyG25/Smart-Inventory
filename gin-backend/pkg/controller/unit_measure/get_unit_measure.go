@@ -1,6 +1,10 @@
 package unit_measure
 
 import (
+	"net/http"
+
+	"github.com/gin-backend/pkg/common/db"
+	"github.com/gin-backend/pkg/common/models"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,14 +17,14 @@ import (
 // @Success				200  "Unit_Measure found successfully."
 // @Router				/unit_measures/{id} [get]
 func GetUnit_Measure(c *gin.Context) {
-	// id := c.Param("id")
+	id := c.Param("id")
 
-	// var Unit_Measure models.Unit_measure
+	var Unit_Measure models.Unit_measure
 
-	// if result := db.DB.Table("unit_measure").First(&Unit_Measure, id); result.Error != nil {
-	// 	c.AbortWithError(http.StatusNotFound, result.Error)
-	// 	return
-	// }
+	if result := db.DB.Preload("Products").Where("id  = ?", id).First(&Unit_Measure); result.Error != nil {
+		c.AbortWithError(http.StatusNotFound, result.Error)
+		return
+	}
 
-	// c.JSON(http.StatusOK, &Unit_Measure)
+	c.JSON(http.StatusOK, &Unit_Measure)
 }

@@ -8,19 +8,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// FindAllMarks 		godoc
-// @Summary			Get All marks.
-// @Description		Return list of marks.
-// @Tags			marks
-// @Success			200  "Marks successfully recovered."
-// @Router			/marks [get]
-func GetMarks(c *gin.Context) {
-	var Marks []models.Mark
+// FindAllProducts 		godoc
+// @Summary			Get All products.
+// @Description		Return list of products.
+// @Tags			products
+// @Success			200  "Products successfully recovered."
+// @Router			/products [get]
+func GetProducts(c *gin.Context) {
+	var Products []models.Product
 
-	if result := db.DB.Table("mark").Find(&Marks); result.Error != nil {
+	if result := db.DB.Preload("Category").Preload("Tax").Preload("Unit_measure").Find(&Products); result.Error != nil {
 		c.AbortWithError(http.StatusNotFound, result.Error)
 		return
 	}
 
-	c.JSON(http.StatusOK, &Marks)
+	c.JSON(http.StatusOK, &Products)
 }
