@@ -1,0 +1,188 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
+            <p-table #dt [value]="company_details" [columns]="cols" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['Comp_det_stock']" [rows]="10"
+                [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [(selection)]="selectedCompany_details" selectionMode="multiple" [rowHover]="true" dataKey="ID">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Manage Company_details</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                class="w-full sm:w-auto" />
+
+                        </span>
+                        <div class="my-2">
+                            <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
+                                (click)="openNew()"></button>
+                            <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
+                                (click)="deleteSelectedCompany_details()"
+                                [disabled]="!selectedCompany_details || !selectedCompany_details.length"></button>
+                        </div>
+                    </div>
+
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="ID">Code <p-sortIcon field="ID"></p-sortIcon></th>
+                        <th pSortableColumn="Comp_det_stock">Description <p-sortIcon field="Comp_det_stock"></p-sortIcon></th>
+                        <th pSortableColumn="Comp_det_maximum_mount">latitude <p-sortIcon field="Comp_det_maximum_mount"></p-sortIcon></th>
+                        <th pSortableColumn="Comp_det_minimun_moun">Lenght <p-sortIcon field="Comp_det_minimun_moun"></p-sortIcon></th>
+                        <th>Product </th>
+                        <th>Company </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-company_detail>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="company_detail"></p-tableCheckbox>
+                        </td>
+                        <td style="width:14%; min-width:10rem;"><span class="p-column-title">Code</span>
+                            {{company_detail.ID}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Description</span>
+                            {{company_detail.Comp_det_stock}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Latitude</span>
+                            {{company_detail.Comp_det_maximum_mount}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Lenght</span>
+                            {{company_detail.Comp_det_minimun_moun}}
+                        </td>
+                       
+
+                        <td>
+                            <div class="flex">
+                                <button pButton pRipple icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-success mr-2"
+                                    (click)="editCompany_detail(company_detail)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2"
+                                    (click)="deleteCompany_detail(company_detail)"></button>
+                                </div> 
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <p-dialog [(visible)]="company_detailDialog" [style]="{width: '450px'}" header="Company_detail Details" [modal]="true" class="p-fluid">
+            <ng-template pTemplate="content">
+
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="lenght">Lenght</label>
+                        <!-- <input type="text" pInputText id="length" [(ngModel)]="company_detail.Bin_length"  /> -->
+                        <p-inputNumber format="decimal" [minFractionDigits]="6" [maxFractionDigits]="6" id="lenght" [(ngModel)]="company_detail.Comp_det_stock"></p-inputNumber>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !company_detail.Comp_det_stock ">Names is required.</small>
+                    </div>
+                    <div class="field col">
+                        <label for="latitude">Latitude</label>
+                        <!-- <input type="text" pInputText id="latitude" [(ngModel)]="company_detail.Bin_latitude " /> -->
+                        <p-inputNumber format="decimal" [minFractionDigits]="6" [maxFractionDigits]="6"  id="latitude" [(ngModel)]="company_detail.Comp_det_maximum_mount"></p-inputNumber>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !company_detail.Comp_det_maximum_mount ">Lastnames is required.</small>
+                    </div>
+                </div>
+
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="lenght">Lenght</label>
+                        <!-- <input type="text" pInputText id="length" [(ngModel)]="company_detail.Bin_length"  /> -->
+                        <p-inputNumber format="decimal" [minFractionDigits]="6" [maxFractionDigits]="6" id="lenght" [(ngModel)]="company_detail.Comp_det_minimun_moun"></p-inputNumber>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !company_detail.Comp_det_minimun_moun ">Names is required.</small>
+                    </div>
+                    
+                </div>
+               
+                
+                <!-- <div class="field">
+                    <label for="company_detailID">Main Company_detail ID</label>
+                    <p-inputNumber id="company_detailID" [(ngModel)]="company_detail.Company_detailID"></p-inputNumber>
+                    
+                </div> -->
+               
+
+
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                    (click)="hideDialog()"></button>
+                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                    (click)="saveCompany_detail()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="editCompany_detailDialog" [style]="{width: '450px'}" header="Company_detail Details" [modal]="true"
+            class="p-fluid">
+            <ng-template pTemplate="content">
+
+                <div class="field">
+                    <label for="description">Description Company_detail</label>
+                    <input type="text" pInputText id="description" [(ngModel)]="company_detail.Bin_description"  />
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !company_detail.Bin_description">Address is required.</small>
+                </div>
+
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="lenght">Lenght</label>
+                        <!-- <input type="text" pInputText id="length" [(ngModel)]="company_detail.Bin_length"  /> -->
+                        <p-inputNumber format="decimal" [minFractionDigits]="6" [maxFractionDigits]="6" id="lenght" [(ngModel)]="company_detail.Bin_lenght"></p-inputNumber>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !company_detail.Bin_lenght ">Names is required.</small>
+                    </div>
+                    <div class="field col">
+                        <label for="latitude">Latitude</label>
+                        <!-- <input type="text" pInputText id="latitude" [(ngModel)]="company_detail.Bin_latitude " /> -->
+                        <p-inputNumber format="decimal" [minFractionDigits]="6" [maxFractionDigits]="6"  id="latitude" [(ngModel)]="company_detail.Bin_latitude"></p-inputNumber>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !company_detail.Bin_latitude ">Lastnames is required.</small>
+                    </div>
+                </div>
+                
+
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                    (click)="hideDialog()"></button>
+                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                    (click)="saveEditCompany_detail()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteCompany_detailDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span *ngIf="company_detail">Are you sure you want to delete <b>{{company_detail.Bin_name}}</b>?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                    (click)="deleteCompany_detailDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                    (click)="confirmDelete()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteCompany_detailsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span>Are you sure you want to delete selected company_details?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                    (click)="deleteCompany_detailsDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                    (click)="confirmDeleteSelected()"></button>
+            </ng-template>
+        </p-dialog>
+    </div>
+</div>

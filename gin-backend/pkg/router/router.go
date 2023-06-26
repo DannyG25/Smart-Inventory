@@ -3,9 +3,11 @@ package router
 import (
 	"net/http"
 
+	"github.com/gin-backend/pkg/controller/antena"
 	"github.com/gin-backend/pkg/controller/binnacle"
 	"github.com/gin-backend/pkg/controller/category"
 	"github.com/gin-backend/pkg/controller/company"
+	"github.com/gin-backend/pkg/controller/company_detail"
 	"github.com/gin-backend/pkg/controller/device"
 	"github.com/gin-backend/pkg/controller/mark"
 	"github.com/gin-backend/pkg/controller/movement"
@@ -116,6 +118,19 @@ func Routers() *gin.Engine {
 	binnaclesRouter.GET("/binnaclesid/:id", binnacle.GetBinnaclesID)
 	binnaclesRouter.PUT("/", binnacle.UpdateBinnacle)
 	binnaclesRouter.DELETE("/:id", binnacle.DeleteBinnacle)
+
+	company_detailsRouter := baseRouter.Group("/company_details")
+	company_detailsRouter.POST("/", company_detail.AddCompany_Detail)
+	company_detailsRouter.GET("/", company_detail.GetCompany_Details)
+	company_detailsRouter.GET("/:id", company_detail.GetCompany_Detail)
+	company_detailsRouter.PUT("/", company_detail.UpdateCompany_Detail)
+	company_detailsRouter.DELETE("/:id", company_detail.DeleteCompany_Detail)
+
+	antenna := antena.NewHandler()
+	antennaRouter := baseRouter.Group("/antenna")
+	antennaRouter.POST("/up", antenna.Up)
+	antennaRouter.POST("/join", antenna.Join)
+	antennaRouter.GET("/stream", antenna.Stream)
 
 	return router
 }

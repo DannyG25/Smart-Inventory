@@ -41,7 +41,10 @@ func main() {
 
 	handler := c.Handler(routes)
 	log.Fatal((http.ListenAndServe(port, handler)))
+
 	http.Handle("/", routes)
+
+	////////////////////////////////////////////////////////
 
 	// server := &http.Server{
 	// 	Addr:    port,

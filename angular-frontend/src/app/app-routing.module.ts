@@ -11,7 +11,7 @@ import { AuthBasicGuard } from './demo/guards/auth-basic.guard';
                 path: '', component: AppLayoutComponent,
                 children: [
                     { path: '', redirectTo: '/login', pathMatch: 'full' },
-                    { path: 'dashboard', loadChildren: () => import('./demo/components/dashboard/dashboard.module').then(m => m.DashboardModule), canActivate: [AuthBasicGuard] },
+                    { path: 'dashboard', loadChildren: () => import('./demo/components/dashboard/dashboard.module').then(m => m.DashboardModule),  },
                     { path: 'profile', loadChildren: () => import('./demo/components/profile/profile.module').then(m => m.ProfileModule), canActivate: [AuthBasicGuard] },
                     { path: 'uikit', loadChildren: () => import('./demo/components/uikit/uikit.module').then(m => m.UIkitModule) },
                     { path: 'utilities', loadChildren: () => import('./demo/components/utilities/utilities.module').then(m => m.UtilitiesModule ) },
@@ -19,7 +19,7 @@ import { AuthBasicGuard } from './demo/guards/auth-basic.guard';
                     { path: 'blocks', loadChildren: () => import('./demo/components/primeblocks/primeblocks.module').then(m => m.PrimeBlocksModule), canActivate: [AuthBasicGuard] },
                     { path: 'pages', loadChildren: () => import('./demo/components/pages/pages.module').then(m => m.PagesModule) },
                     { path: 'administrator', loadChildren: () => import('./demo/components/administrator/administrator.module').then(m => m.AdministratorModule), canActivate: [AuthBasicGuard] },
-                    { path: 'management', loadChildren: () => import('./demo/components/management/management.module').then(m => m.ManagementModule), canActivate: [AuthBasicGuard] }
+                    { path: 'management', loadChildren: () => import('./demo/components/management/management.module').then(m => m.ManagementModule),  }
 
                 ]
             },
