@@ -16,6 +16,7 @@
   import { Tax } from 'src/app/demo/api/tax';
   import { Subscription } from 'rxjs';
   import { EventsourceService } from 'src/app/demo/service/eventsource.service';
+  import { HttpsourceService } from 'src/app/demo/service/httpsource.service'; 
 
   @Component({
       providers: [MessageService],
@@ -42,9 +43,9 @@
       users: User[] = [];
       selectedUser?: User;
       private subscription!: Subscription;
-
+      eventData: any;
   
-      constructor(private _api: ApiService, private eventSourceService: EventsourceService) {
+      constructor(private _api: ApiService, private eventSourceService: EventsourceService, private httpsourceservice: HttpsourceService) {
       }
 
       ngOnInit(): void {
@@ -78,16 +79,38 @@
               { name: 'United States', code: 'US' },
           ];
 
-          this.eventSourceService.startEventSource('http://localhost:3000/api/antenna/stream');
-          this.subscription = this.eventSourceService.getServerSentEvent('http://localhost:3000/api/antenna/stream')
-          .subscribe(
-            event => console.log(event),
-            error => console.error(error)
-          );
+        //   this.eventSourceService.startEventSource('http://localhost:3000/api/antenna/stream');
+        //   this.subscription = this.eventSourceService.getServerSentEvent('http://localhost:3000/api/antenna/stream')
+        //   .subscribe(
+        //     event => console.log(event),
+        //     error => console.error(error)
+        //   );
+        
+
+        const url = 'http://localhost:3000/api/antenna/stream';
+        this.httpsourceservice.startEventSource(url);
+
+        this.subscription = this.httpsourceservice.getServerSentEvents<any>('message').subscribe(
+        (data: any) => {
+            this.eventData = data;
+            console.log(this.eventData)
+            // Realiza las operaciones necesarias con los datos recibidos en tiempo real
+        },
+        (error) => {
+            console.error('Error al recibir los eventos SSE', error);
+        }
+        );
+    
       }
 
-      ngOnDestroy() {
-        this.eventSourceService.closeEventSource();
-        this.subscription.unsubscribe();
+    //   ngOnDestroy() {
+    //     this.eventSourceService.closeEventSource();
+    //     this.subscription.unsubscribe();
+    //   }
+    ngOnDestroy(): void {
+        if (this.subscription) {
+          this.subscription.unsubscribe();
+          this.httpsourceservice.closeEventSource();
+        }
       }
   }

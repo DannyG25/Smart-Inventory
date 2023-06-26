@@ -2,7 +2,7 @@ package antena
 
 import (
 	"encoding/json"
-	"fmt"
+	// "fmt"
 	"log"
 	"net/http"
 	"sync"
@@ -98,14 +98,14 @@ func (h *Handler) ServeSSE(c *gin.Context) {
 				return
 			}
 
-			if result := db.DB.Where("id  = ?", body.Id_product).First(&Product); result.Error != nil {
+			if result := db.DB.Preload("Category").Preload("Tax").Preload("Unit_measure").Where("id  = ?", body.Id_product).First(&Product); result.Error != nil {
 				c.AbortWithError(http.StatusNotFound, result.Error)
 				return
 			}
-			// El mensaje está en formato JSON válido
-			// Puedes realizar acciones adicionales con los datos JSON
+			// log.Printf("Objetc Product: %s", &Product)
+			c.SSEvent("message", &Product) // Envía el evento SSE con el tipo "message" y el contenido del mensaje
 
-			c.String(http.StatusOK, fmt.Sprintf("data: %s\n\n", message))
+			// c.JSON(http.StatusOK, &Product)
 			c.Writer.Flush()
 		case <-c.Writer.CloseNotify():
 			return
