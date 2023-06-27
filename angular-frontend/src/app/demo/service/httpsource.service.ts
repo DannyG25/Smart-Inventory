@@ -21,9 +21,9 @@ export class HttpsourceService {
 
       this.eventSource.onerror = error => {
         if (this.eventSource.readyState === 0) {
-          console.log('La conexión SSE ha sido cerrada por el servidor.');
-          this.eventSource.close();
-          observer.complete();
+          // console.log('La conexión SSE ha sido cerrada por el servidor.');
+          // this.eventSource.close();
+          // observer.complete();
         } else {
           observer.error('Error en EventSource: ' + error);
         }

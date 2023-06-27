@@ -5,8 +5,7 @@ import { ManagementRoutingModule } from './management-routing.module';
 
 @NgModule({
   declarations: [
-  
-
+ 
   ],
   imports: [
     CommonModule,

@@ -15,14 +15,14 @@ type UpdateDeviceBody struct {
 	Movement_id *uint
 }
 
-// CreateDevices		godoc
-// @Summary			Create devices
-// @Description		Save devices data in Db.
+// UpdateDevices		godoc
+// @Summary			Update devices
+// @Description		Update devices data .
 // @Param			devices body AddDeviceBody{} true "Create devices"
 // @Produce			application/json
 // @Tags			devices
 // @Success			200 {object} AddDeviceBody{} "successfully created device."
-// @Router			/devices [post]
+// @Router			/devices [put]
 func UpdateDevice(c *gin.Context) {
 	body := UpdateDeviceBody{}
 	devices := models.Device{}

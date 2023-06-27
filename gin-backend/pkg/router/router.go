@@ -13,6 +13,7 @@ import (
 	"github.com/gin-backend/pkg/controller/movement"
 	"github.com/gin-backend/pkg/controller/product"
 	"github.com/gin-backend/pkg/controller/tax"
+	"github.com/gin-backend/pkg/controller/transaction"
 	"github.com/gin-backend/pkg/controller/unit_measure"
 	"github.com/gin-backend/pkg/controller/users"
 	"github.com/gin-backend/pkg/middleware"
@@ -131,6 +132,13 @@ func Routers() *gin.Engine {
 	antennaRouter.POST("/up", antenna.Up)
 	antennaRouter.POST("/join", antenna.Join)
 	antennaRouter.GET("/stream", antenna.Stream)
+
+	transactionsRouter := baseRouter.Group("/transactions")
+	transactionsRouter.POST("/", transaction.AddTransaction)
+	transactionsRouter.GET("/", transaction.GetTransactions)
+	transactionsRouter.GET("/:id", transaction.GetTransaction)
+	transactionsRouter.PUT("/", transaction.UpdateTransaction)
+	transactionsRouter.DELETE("/:id", transaction.DeleteTransaction)
 
 	return router
 }

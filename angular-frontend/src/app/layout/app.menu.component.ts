@@ -45,6 +45,11 @@ export class AppMenuComponent implements OnInit {
                                 icon: 'pi pi-fw pi-home',
                                 routerLink: ['/management/transaction']
                             },
+                            {
+                                label: 'List Transactions',
+                                icon: 'pi pi-fw pi-home',
+                                routerLink: ['/management/transactionlist']
+                            },
                             
                         ]
                     },

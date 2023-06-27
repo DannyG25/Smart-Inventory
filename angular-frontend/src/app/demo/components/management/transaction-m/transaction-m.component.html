@@ -15,6 +15,7 @@
                     pRipple
                     label="Save"
                     icon="pi pi-print"
+                    (click)="saveTransaction()"
                 ></button>
             </div>
 
@@ -99,7 +100,7 @@
 
             <p-table
                 #dt
-                [value]="companies"
+                [value]="transaction_details"
                 [columns]="cols"
                 responsiveLayout="scroll"
                 styleClass="p-datatable-striped"
@@ -108,35 +109,63 @@
             >
                 <ng-template pTemplate="header">
                     <tr>
-                        <th>Code</th>
-                        <th>Quantity</th>
+                        <!-- <th>Code</th> -->
                         <th>Product</th>
+                        <th>Quantity</th>
+                        
                         <th>Unit Price</th>
-                        <th>Total</th>
+                        <th>Tax</th>
+                        <th>SubTotal</th>
                         <th style="width: 5rem"></th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-company>
+                <ng-template pTemplate="body" let-transaction_detail let-editing="editing">
                     <tr>
-                        <td>
-                            <span class="p-column-title">Code</span>
-                            <!-- {{company.ID}} -->
+                        <td [pEditableColumn]="transaction_detail.Product.Pro_name" pEditableColumnField="product">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="transaction_detail.Product.Pro_name" />
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{ transaction_detail.Product.Pro_name }}
+                                </ng-template>
+                            </p-cellEditor>
                         </td>
-                        <td>
-                            <span class="p-column-title">Name</span>
-                            <!-- {{company.Comp_name}} -->
+                        
+                        <td [pEditableColumn]="transaction_detail.Tran_det_mount" pEditableColumnField="mount">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="transaction_detail.Tran_det_mount" />
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{ transaction_detail.Tran_det_mount }}
+                                </ng-template>
+                            </p-cellEditor>
                         </td>
-                        <td>
-                            <span class="p-column-title">Address</span>
-                            <!-- {{company.Comp_address}} -->
+                        <td [pEditableColumn]="transaction_detail.Product.Pro_price" pEditableColumnField="price">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="transaction_detail.Product.Pro_price" />
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{ transaction_detail.Product.Pro_price }}
+                                </ng-template>
+                            </p-cellEditor>
                         </td>
+                        
                         <td>
-                            <span class="p-column-title">Phone</span>
-                            <!-- {{company.Comp_phone}} -->
+                            <span class="p-column-title">tax</span>
+                            {{transaction_detail.Product.Tax.Tax_rate}}
                         </td>
-                        <td>
-                            <span class="p-column-title">RUC</span>
-                            <!-- {{company.Comp_ruc}} -->
+                        <td [pEditableColumn]="transaction_detail.Tran_det_subtotal" pEditableColumnField="subtotal">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="transaction_detail.Tran_det_subtotal" />
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{ transaction_detail.Tran_det_subtotal }}
+                                </ng-template>
+                            </p-cellEditor>
                         </td>
                         <td style="width: 5rem">
                             <button
@@ -157,7 +186,7 @@
                         </td>
                         <td>
                             <span>0.00</span>
-                            <!-- {{company.Comp_name}} -->
+                            
                         </td>
                         <td></td>
                     </tr>
@@ -168,7 +197,7 @@
                         </td>
                         <td>
                             <span class="p-column-title">0.00</span>
-                            <!-- {{company.Comp_name}} -->
+                            {{total}}
                         </td>
                         <td></td>
                     </tr>

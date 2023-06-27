@@ -6,6 +6,7 @@ import { SelectItem } from 'primeng/api';
 import { Device } from 'src/app/demo/api/device';
 import { Binnacle } from 'src/app/demo/api/binnacle';
 import { Router } from '@angular/router';
+import { User } from 'src/app/demo/api/users';
 @Component({
   providers: [MessageService],
   templateUrl: './device-m.component.html',
@@ -24,7 +25,7 @@ export class DeviceMComponent {
   device: Device = {
     Binnacles: []
   };
-  userData?: Device
+  userData?: User
   selectedDevices: Device[] = [];
   selectedStatus: any;
   submitted: boolean = false;

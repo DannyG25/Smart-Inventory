@@ -13,6 +13,8 @@ import { RouterModule } from '@angular/router';
     { path: 'unitMeasure', loadChildren: () => import ('./unitmeasure-m/unitmeasure-m.module').then(m => m.UnitmeasureMModule) },
     { path: 'product', loadChildren: () => import ('./product-m/product-m.module').then(m => m.ProductMModule) },
     { path: 'transaction', loadChildren: () => import ('./transaction-m/transaction-m.module').then(m => m.TransactionMModule) },
+    { path: 'transactionlist', loadChildren: () => import ('./transactionslist-m/transactionslist-m.module').then(m => m.TransactionslistMModule) },
+    { path: 'transactiondetail/:id', loadChildren: () => import ('./transactiondetail-m/transactiondetail-m.module').then(m => m.TransactiondetailMModule) },
     { path: 'inventory', loadChildren: () => import ('./inventory-m/inventory-m.module').then(m => m.InventoryMModule) },
     { path: 'stock', loadChildren: () => import ('./stock-m/stock-m.module').then(m => m.StockMModule) },
     { path: '**', redirectTo: '/notfound' }

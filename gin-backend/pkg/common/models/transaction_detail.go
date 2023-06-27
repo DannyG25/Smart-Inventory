@@ -8,4 +8,5 @@ type Transaction_detail struct {
 	Tran_det_subtotal float32
 	Product_id        uint
 	Transaction_id    uint
+	Product           *Product
 }
