@@ -166,6 +166,12 @@ export class TransactionMComponent implements OnInit {
                 console.log(err)
             });
             this.total=0
+            this.header_transactions = [];
+            this.header_transaction={};
+            this.transaction_details = [];
+            this.transaction_detail = {
+                Tran_det_mount: 1
+            };
         }
         
     }

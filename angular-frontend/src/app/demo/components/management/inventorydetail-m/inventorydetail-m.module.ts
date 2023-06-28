@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { InventoryMComponent } from './inventory-m.component';
-import { InventoryMRoutingModule } from './inventory-m-routing.module';
+import { InventorydetailMRoutingModule } from './inventorydetail-m-routing.module';
+import { InventorydetailMComponent } from './inventorydetail-m.component';
 import { FormsModule } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
@@ -25,12 +25,10 @@ import { ToolbarModule } from 'primeng/toolbar';
 
 
 @NgModule({
-  declarations: [
-    InventoryMComponent
-  ],
+  declarations: [InventorydetailMComponent],
   imports: [
     CommonModule,
-    InventoryMRoutingModule,
+    InventorydetailMRoutingModule,
     TableModule,
     DividerModule,
     CalendarModule,
@@ -52,4 +50,4 @@ import { ToolbarModule } from 'primeng/toolbar';
     DialogModule
   ]
 })
-export class InventoryMModule { }
+export class InventorydetailMModule { }

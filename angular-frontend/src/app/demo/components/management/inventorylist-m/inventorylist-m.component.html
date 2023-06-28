@@ -1,0 +1,212 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
+            <p-table #dt [value]="inventories" [columns]="cols" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['Users.User_names']" [rows]="10"
+                [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [(selection)]="selectedInventories" selectionMode="multiple" [rowHover]="true" dataKey="ID">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Manage Inventories</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                class="w-full sm:w-auto" />
+
+                        </span>
+                        <div class="my-2">
+                            <!-- <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
+                                (click)="openNew()"></button>
+                            <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
+                                (click)="deleteSelectedInventories()"
+                                [disabled]="!selectedInventories || !selectedInventories.length"></button> -->
+                        </div>
+                    </div>
+
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="ID">Code <p-sortIcon field="ID"></p-sortIcon></th>
+                        <th pSortableColumn="Users.User_names">Produced By<p-sortIcon field="Users.User_names"></p-sortIcon></th>
+                        <th pSortableColumn="Inv_head_date">Fecha <p-sortIcon field="Inv_head_date"></p-sortIcon></th>
+                        <th pSortableColumn="Company.Comp_name">Company <p-sortIcon field="Company.Comp_name"></p-sortIcon></th>
+
+                        
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-inventory>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="inventory"></p-tableCheckbox>
+                        </td>
+                        <td style="width:14%; min-width:10rem;"><span class="p-column-title">Code</span>
+                            {{inventory.ID}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Produced By</span>
+                            {{inventory.Users.User_names}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Fecha</span>
+                            {{inventory.Inv_head_date}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Company</span>
+                            {{inventory.Company.Comp_name}}
+                        </td>
+                        
+              
+                        <td>
+                            <div class="flex">
+                                <!-- <button pButton pRipple icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-success mr-2"
+                                    (click)="editInventory(inventory)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2"
+                                    (click)="deleteInventory(inventory)"></button> -->
+                                <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-info "
+                                [routerLink]="['/management/inventorydetail',inventory.ID]"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <p-dialog [(visible)]="inventoryDialog" [style]="{width: '450px'}" header="Inventory Details" [modal]="true" class="p-fluid">
+            <ng-template pTemplate="content">
+
+                <div class="field">
+                    <label for="antenna">Antenna</label>
+                    <input type="text" pInputText id="antenna" [(ngModel)]="inventory.Dev_antenna"  />                   
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !inventory.Dev_antenna">Antenna is required.</small> 
+                </div>
+
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="lenght">Lenght</label>
+                        <!-- <input type="text" pInputText id="length" [(ngModel)]="binnacle.Bin_length"  /> -->
+                        <p-inputNumber format="decimal" [minFractionDigits]="6" [maxFractionDigits]="6" id="lenght" [(ngModel)]="binnacle.Bin_lenght"></p-inputNumber>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !binnacle.Bin_lenght ">Names is required.</small>
+                    </div>
+                    <div class="field col">
+                        <label for="latitude">Latitude</label>
+                        <!-- <input type="text" pInputText id="latitude" [(ngModel)]="binnacle.Bin_latitude " /> -->
+                        <p-inputNumber format="decimal" [minFractionDigits]="6" [maxFractionDigits]="6"  id="latitude" [(ngModel)]="binnacle.Bin_latitude"></p-inputNumber>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !binnacle.Bin_latitude ">Lastnames is required.</small>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="description">Description Binnacle</label>
+                    <input type="text" pInputText id="description" [(ngModel)]="binnacle.Bin_description"  />
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !binnacle.Bin_description">Address is required.</small>
+                </div>
+                
+                <!-- <div class="field">
+                    <label for="inventoryID">Main Inventory ID</label>
+                    <p-inputNumber id="inventoryID" [(ngModel)]="inventory.InventoryID"></p-inputNumber>
+                    
+                </div> -->
+               
+
+
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                    (click)="hideDialog()"></button>
+                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                    (click)="saveInventory()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="editInventoryDialog" [style]="{width: '450px'}" header="Inventory Details" [modal]="true"
+            class="p-fluid">
+            <ng-template pTemplate="content">
+
+                <div class="field">
+                    <label for="identification">Identification</label>
+                    <input type="text" pInputText id="identification" [(ngModel)]="inventory.Dev_identification"  />                   
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !inventory.Dev_identification">Identification is required.</small> 
+                </div>
+
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="name">Names</label>
+                        <input type="text" pInputText id="name" [(ngModel)]="inventory.Dev_names"  />
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !inventory.Dev_names">Names is required.</small>
+                    </div>
+                    <div class="field col">
+                        <label for="lastnames">Lastnames</label>
+                        <input type="text" pInputText id="lastnames" [(ngModel)]="inventory.Dev_lastnames" />
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !inventory.Dev_lastnames">Lastnames is required.</small>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="addres">Address</label>
+                    <input type="text" pInputText id="address" [(ngModel)]="inventory.Dev_address"  />
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !inventory.Dev_address">Address is required.</small>
+                </div>
+                <div class="field">
+                    <label for="phone">Phone</label>
+                    <input type="text" pInputText id="phone" [(ngModel)]="inventory.Dev_phone"  />
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !inventory.Dev_phone">Phone is required.</small>
+                </div>
+
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="inventoryname">Inventoryname</label>
+                        <input type="text" pInputText id="inventoryname" [(ngModel)]="inventory.Dev_inventoryname"  />
+                        <!-- <small class="ng-dirty ng-invalid" *ngIf="submitted && !inventory.Dev_phone">Phone is required.</small> -->
+                    </div>
+                    <div class="field col">
+                        <label for="password">Password</label>
+                        <input type="text" pInputText id="password" [(ngModel)]="inventory.Dev_password" />
+                        <!-- <small class="ng-dirty ng-invalid" *ngIf="submitted && !inventory.Dev_ruc">RUC is required.</small> -->
+                    </div>
+                </div>
+                
+
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                    (click)="hideDialog()"></button>
+                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                    (click)="saveEditInventory()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteInventoryDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span *ngIf="inventory">Are you sure you want to delete <b>{{inventory.Dev_name}}</b>?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                    (click)="deleteInventoryDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                    (click)="confirmDelete()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteInventoriesDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span>Are you sure you want to delete selected inventories?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                    (click)="deleteInventoriesDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                    (click)="confirmDeleteSelected()"></button>
+            </ng-template>
+        </p-dialog>
+    </div>
+</div>

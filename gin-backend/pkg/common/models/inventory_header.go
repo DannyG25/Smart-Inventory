@@ -12,4 +12,6 @@ type Inventory_header struct {
 	Company_id        uint
 	Users_id          uint
 	Inventory_details []Inventory_detail
+	Company           *Company
+	Users             *Users
 }

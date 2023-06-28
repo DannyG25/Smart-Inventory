@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { InventoryMComponent } from './inventory-m.component';
+import { InventorylistMComponent } from './inventorylist-m.component';
 import { RouterModule } from '@angular/router';
 
 
 
 @NgModule({
   imports: [RouterModule.forChild([
-    { path: '', component: InventoryMComponent }
+    { path: '', component: InventorylistMComponent }
   ])],
   exports: [RouterModule]
 }) 
-export class InventoryMRoutingModule { }
+export class InventorylistMRoutingModule { }

@@ -9,11 +9,13 @@ import (
 	"github.com/gin-backend/pkg/controller/company"
 	"github.com/gin-backend/pkg/controller/company_detail"
 	"github.com/gin-backend/pkg/controller/device"
+	"github.com/gin-backend/pkg/controller/inventory"
 	"github.com/gin-backend/pkg/controller/mark"
 	"github.com/gin-backend/pkg/controller/movement"
 	"github.com/gin-backend/pkg/controller/product"
 	"github.com/gin-backend/pkg/controller/tax"
 	"github.com/gin-backend/pkg/controller/transaction"
+
 	"github.com/gin-backend/pkg/controller/unit_measure"
 	"github.com/gin-backend/pkg/controller/users"
 	"github.com/gin-backend/pkg/middleware"
@@ -139,6 +141,13 @@ func Routers() *gin.Engine {
 	transactionsRouter.GET("/:id", transaction.GetTransaction)
 	transactionsRouter.PUT("/", transaction.UpdateTransaction)
 	transactionsRouter.DELETE("/:id", transaction.DeleteTransaction)
+
+	inventoriesRouter := baseRouter.Group("/inventories")
+	inventoriesRouter.POST("/", inventory.AddInventory)
+	inventoriesRouter.GET("/", inventory.GetInventories)
+	inventoriesRouter.GET("/:id", inventory.GetInventory)
+	inventoriesRouter.PUT("/", inventory.UpdateInventory)
+	inventoriesRouter.DELETE("/:id", inventory.DeleteInventory)
 
 	return router
 }

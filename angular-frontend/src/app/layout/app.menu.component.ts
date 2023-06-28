@@ -53,6 +53,23 @@ export class AppMenuComponent implements OnInit {
                             
                         ]
                     },
+                    {
+                        label: 'Inventory',
+                        icon: 'pi pi-fw pi-user',
+                        items: [
+                            {
+                                label: 'Calculate Inventory',
+                                icon: 'pi pi-fw pi-home',
+                                routerLink: ['/management/inventory']
+                            },
+                            {
+                                label: 'List Inventory',
+                                icon: 'pi pi-fw pi-home',
+                                routerLink: ['/management/inventorylist']
+                            },
+                            
+                        ]
+                    },
                 ]
             },
             {
