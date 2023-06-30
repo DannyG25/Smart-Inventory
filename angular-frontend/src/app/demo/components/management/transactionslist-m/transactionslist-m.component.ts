@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { ApiService } from 'src/app/demo/service/api.service';
@@ -7,181 +7,223 @@ import { Transaction } from 'src/app/demo/api/transaction';
 import { Binnacle } from 'src/app/demo/api/binnacle';
 import { Router } from '@angular/router';
 import { User } from 'src/app/demo/api/users';
+import { Company } from 'src/app/demo/api/company';
+import { Device } from 'src/app/demo/api/device';
+import * as L from 'leaflet';
+import { Map, NavigationControl, Marker, Popup } from 'maplibre-gl';
+import { HttpClient } from '@angular/common/http';
+import { MapInfoWindow, MapMarker, GoogleMap } from '@angular/google-maps';
+
+declare var google: any;
+
 
 @Component({
-  providers: [MessageService],
-  templateUrl: './transactionslist-m.component.html',
-  styleUrls: ['./transactionslist-m.component.scss']
+    providers: [MessageService],
+    templateUrl: './transactionslist-m.component.html',
+    styleUrls: ['./transactionslist-m.component.scss'],
 })
-export class TransactionslistMComponent {
-  transactionDialog: boolean = false;
-  editTransactionDialog: boolean = false;
+export class TransactionslistMComponent implements OnInit, AfterViewInit {
+    transactionDialog: boolean = false;
+    editTransactionDialog: boolean = false;
 
-  deleteTransactionDialog: boolean = false;
+    deleteTransactionDialog: boolean = false;
 
-  deleteTransactionsDialog: boolean = false;
-
-  transactions: Transaction[] = [];
-  binnacle: Binnacle={};
-  transaction: Transaction = {
-    Transaction_details: []
-  };
-  userData?: User
-  selectedTransactions: Transaction[] = [];
-  selectedStatus: any;
-  submitted: boolean = false;
-
-  cols: any[] = [];
-
-  statuses: SelectItem[] = [];
-
-  rowsPerPageOptions = [5, 10, 20];
-
-  constructor(
-    private _api: ApiService,
-    private messageService: MessageService,
-    private router: Router
-
-  ) { }
-
-  ngOnInit() {
-    this._api.getTypeRequest('users/validate').subscribe((user: any) => {
-      this.userData = user
-      this._api.getTypeRequest('transactions').subscribe((data: any) => {
-        this.transactions = data
-      }, err => {
-        console.log(err)
-      });
-    }, (err: any) => {
-      console.log(err)
-    });
-    
-    
-    this.cols = [
-      { field: 'transaction', header: 'Transaction' }
-    ];
-
-
-  }
-
-  openNew() {
-
-    // this.statuses=  [];
-    // this.transactionDialog = true;
-    // this.transactions.forEach(comp => {
-    //   const statusElement = {
-    //     label: comp.Transaction_name,
-    //     value: comp.ID
-    //   };
-    //   this.statuses.push(statusElement);
-    // });
-
-    this.transaction = {
-      Transaction_details:[]
+    deleteTransactionsDialog: boolean = false;
+    transactions: Transaction[] = [];
+    transaction: Transaction = {
+        Transaction_details: [],
     };
-    this.submitted = false;
-    this.transactionDialog = true;
-  }
+    userData?: User;
+    selectedTransactions: Transaction[] = [];
+    selectedStatus: any;
+    submitted: boolean = false;
+
+    cols: any[] = [];
+
+    statuses: SelectItem[] = [];
+
+    rowsPerPageOptions = [5, 10, 20];
+
+    companies?: Company[] = [];
+    company?: Company = {};
+    UserData?: User;
+    devices?: Device[] = [];
+    binnacles?: Binnacle[] = [];
+    binnacle?: Binnacle = {};
+    navigationControl = new NavigationControl({});
+    CompanyData?: Company;
+    mapa: any;
+    directionsService = new google.maps.DirectionsService();
+    directionsDisplay = new google.maps.DirectionsRenderer();
+   
+    @ViewChild(GoogleMap) map!: GoogleMap;    private mapContainer!: ElementRef<HTMLElement>;
+    locations: { name: string, lat: number, lng: number }[] = []; 
+    mainlocation: { name: string; lat: number; lng: number; }[] = []; 
+     constructor(
+        private _api: ApiService,
+        private messageService: MessageService,
+        private router: Router,
+        private http: HttpClient // añadir esto
+    ) {}
+
+    ngOnInit() {
+        
+        this._api.getTypeRequest('users/validate').subscribe(
+            (user: any) => {
+                this.userData = user;
+                this._api.getTypeRequest('transactions').subscribe(
+                    (data: any) => {
+                        this.transactions = data;
+                        this.loadCompanyMap();
+
+                    },
+                    (err) => {
+                    }
+                );
+            },
+            (err: any) => {
+            }
+        );
+
+        this.cols = [{ field: 'transaction', header: 'Transaction' }];
 
 
-
-  deleteSelectedTransactions() {
-    this.deleteTransactionsDialog = true;
-  }
-
-  editTransaction(transaction: Transaction) {
-    this.transaction = { ...transaction };
-    this.editTransactionDialog = true;
-  }
-
-  deleteTransaction(transaction: Transaction) {
-    this.deleteTransactionDialog = true;
-    this.transaction = { ...transaction };
-  }
-  viewBinnacles(transaction: Transaction){
-    this.router.navigate(['/management/binnacle'], { queryParams: { id: transaction.ID } });
-  }
-
-  confirmDeleteSelected() {
-    this.deleteTransactionsDialog = false;
-    console.log(this.selectedTransactions)
-    for (let selectTransaction of this.selectedTransactions) {
-      this._api.deleteTypeRequest('transactions', selectTransaction.ID).subscribe((res: any) => {
-      }, err => {
-        console.log(err)
-      });
     }
-    // this._api.getTypeRequest('transactions').subscribe((data: any) => this.transactions = data);
-    this.transactions = this.transactions.filter(val => !this.selectedTransactions.includes(val));
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Transactions Deleted', life: 3000 });
+    ngAfterViewInit(): void {
+        // this.drawRoute();
+      }
 
-    this.selectedTransactions = [];
 
-  }
-
-  confirmDelete() {
-    this.deleteTransactionDialog = false;
-    this._api.deleteTypeRequest('transactions', this.transaction.ID).subscribe((res: any) => {
-      this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Transaction Deleted', life: 3000 });
-      this.transaction = {
-        Transaction_details:[]
-
-      };
-      this._api.getTypeRequest('transactions').subscribe((data: any) => this.transactions = data);
-    }, err => {
-      console.log(err)
+    deleteSelectedTransactions() {
+        this.deleteTransactionsDialog = true;
     }
-    );
 
-  }
+    viewBinnacles(transaction: Transaction) {
+        this.router.navigate(['/management/binnacle'], {
+            queryParams: { id: transaction.ID },
+        });
+    }
 
-  hideDialog() {
-    this.transactionDialog = false;
-    this.submitted = false;
-    this.editTransactionDialog=false;
-  }
+    confirmDeleteSelected() {
+        this.deleteTransactionsDialog = false;
+        console.log(this.selectedTransactions);
+        for (let selectTransaction of this.selectedTransactions) {
+            this._api
+                .deleteTypeRequest('transactions', selectTransaction.ID)
+                .subscribe(
+                    (res: any) => {},
+                    (err) => {
+                    }
+                );
+        }
+        // this._api.getTypeRequest('transactions').subscribe((data: any) => this.transactions = data);
+        this.transactions = this.transactions.filter(
+            (val) => !this.selectedTransactions.includes(val)
+        );
+        this.messageService.add({
+            severity: 'success',
+            summary: 'Successful',
+            detail: 'Transactions Deleted',
+            life: 3000,
+        });
 
-  saveTransaction() {
-    this.submitted = true;
-    if (this.transaction.Tran_Total) {
+        this.selectedTransactions = [];
+    }
+
+    hideDialog() {
+        this.transactionDialog = false;
+        this.submitted = false;
+        this.editTransactionDialog = false;
+    }
+
+    onGlobalFilter(table: Table, event: Event) {
+        table.filterGlobal(
+            (event.target as HTMLInputElement).value,
+            'contains'
+        );
+    }
+
+    loadCompanyMap() {
+        
+
+        
+        this.CompanyData = this.userData?.Company;
+        console.log(this.CompanyData)
+        for (let device of this.CompanyData?.Devices ??
+            []) {
+            // for (let binnacle of device.Binnacles ?? []) {
+            let binnacles = device.Binnacles ?? [];
+            this.binnacle = binnacles[binnacles.length - 1];
+            console.log(this.binnacle);
+            this.binnacle.Bin_lenght
+            if(this.binnacle.Bin_description && this.binnacle.Bin_latitude && this.binnacle.Bin_lenght) {
+                this.mainlocation.push({
+                  name: this.binnacle.Bin_description,
+                  lat: this.binnacle.Bin_latitude,
+                  lng: this.binnacle.Bin_lenght
+                });
+              }
+            
+        }
+            
+        this.transactions.forEach((item) => {
+            // console.log(item);
+            if (item.Users2?.Company) {
+                this.companies?.push(item.Users2.Company);
+               
+            }
+        });
+        console.log(this.companies);
+            if (this.companies) {
+                
+                for (let company of this.companies) {
+                    for (let device of company.Devices ?? []) {
+                        for (let binnacle of device.Binnacles ?? []) {
+                            if(binnacle.Bin_description && binnacle.Bin_latitude && binnacle.Bin_lenght) {
+                                this.locations.push({
+                                  name: binnacle.Bin_description,
+                                  lat: binnacle.Bin_latitude,
+                                  lng: binnacle.Bin_lenght
+                                });
+                              }
+                            
+                        }
+                    }
+                }
+                console.log(this.locations)
+            }
+        // this.loadGoogleMap()
+        this.drawRoute()
+    }
+    
+      drawRoute(): void {
+        console.log(this.mainlocation);
+        const directionsService = new google.maps.DirectionsService();
+        const directionsRenderer = new google.maps.DirectionsRenderer();
+        directionsRenderer.setMap(this.map.googleMap!);
       
-      // this.transaction.Company_id=this.userData?.Company_id
-      // this.transaction.Binnacles?.push(this.binnacle)
-      console.table(this.transaction)
+        const waypoints: google.maps.DirectionsWaypoint[] = this.locations.map(location => ({
+          location: { lat: Number(location.lat), lng: Number(location.lng) },
+          stopover: true,
+        }));
+       
+        console.log(waypoints)
+       
+        
+        directionsService.route({
+          origin: { lat: Number(this.binnacle?.Bin_latitude), lng: Number(this.binnacle?.Bin_lenght) },
+          destination: {lat: Number(this.binnacle?.Bin_latitude), lng: Number(this.binnacle?.Bin_lenght) },
+          waypoints: waypoints,
+          travelMode: google.maps.TravelMode.DRIVING,
+        }, (response: google.maps.DirectionsResult, status: google.maps.DirectionsStatus) => {
+          if (status === 'OK') {
+            directionsRenderer.setDirections(response);
+          } else {
+            window.alert('Directions request failed due to ' + status);
+          }
+        });
+      }
       
-      this._api.postTypeRequest('transactions', this.transaction).subscribe((res: any) => {
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Transaction Created', life: 3000 });
-        this._api.getTypeRequest('transactions').subscribe((data: any) => this.transactions = data);      }, err => {
-        console.log(err)
-      });
-      this.transactionDialog = false;
-      this.transaction = {
-        Transaction_details:[]
-      };
-      this.binnacle={}
-    }
-  }
-  saveEditTransaction() {
-    this.submitted = true;
-    if (this.transaction.Tran_Total) {
-      // console.log(this.transaction.Transaction_names)
-      // this.transaction.Company_id=this.userData?.Company_id
-      this._api.putTypeRequest('transactions', this.transaction).subscribe((res: any) => {
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Transaction Updated', life: 3000 });
 
-        console.log()
-        this._api.getTypeRequest('transactions').subscribe((data: any) => this.transactions = data);      }, err => {
-        console.log(err)
-      });
-      this.editTransactionDialog = false;
-      this.transaction = {
-        Transaction_details:[]
-      };
-      this.binnacle={}
-    }
-  }
-
-  onGlobalFilter(table: Table, event: Event) {
-    table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
-  }
+      
 }

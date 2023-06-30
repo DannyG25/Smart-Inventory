@@ -17,7 +17,7 @@ import (
 func GetTransactions(c *gin.Context) {
 	var Transactions []models.Transaction
 
-	if result := db.DB.Preload("Users").Preload("Transaction_details").Preload("Users2").Find(&Transactions); result.Error != nil {
+	if result := db.DB.Preload("Transaction_details").Preload("Users").Preload("Users2.Company.Devices.Binnacles").Find(&Transactions); result.Error != nil {
 		c.AbortWithError(http.StatusNotFound, result.Error)
 		return
 	}

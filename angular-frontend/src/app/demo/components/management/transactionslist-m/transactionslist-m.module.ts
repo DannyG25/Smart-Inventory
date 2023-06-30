@@ -21,6 +21,7 @@ import { RippleModule } from 'primeng/ripple';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 
 
@@ -30,6 +31,7 @@ import { ToolbarModule } from 'primeng/toolbar';
     CommonModule,
     TransactionslistMRoutingModule,
     TableModule,
+    GoogleMapsModule,
     DividerModule,
     CalendarModule,
     FileUploadModule,

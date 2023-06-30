@@ -1,3 +1,4 @@
+import { Company } from "./company"
 import { Inventory_header } from "./inventory_header"
 import { Transaction } from "./transaction"
 
@@ -15,4 +16,5 @@ export interface User {
 	Inventory_headers?: Inventory_header[]
 	Employees?: Transaction[]
 	Beneficiary?: Transaction[]
+	Company?:Company
 }

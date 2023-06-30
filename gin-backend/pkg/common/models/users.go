@@ -16,4 +16,5 @@ type Users struct {
 	Inventory_headers   []Inventory_header
 	Employees           []Transaction
 	Beneficiary         []Transaction
+	Company             *Company
 }
