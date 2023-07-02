@@ -12,6 +12,7 @@ import (
 type AddTransactionBody struct {
 	Tran_date           time.Time
 	Tran_Total          float32
+	Tran_status         string
 	Device_id           uint
 	Users_id            uint
 	Users2_id           uint
@@ -41,6 +42,7 @@ func AddTransaction(c *gin.Context) {
 	Transaction.Tran_Total = body.Tran_Total
 	Transaction.Users2_id = body.Users2_id
 	Transaction.Users_id = body.Users_id
+	Transaction.Tran_status = body.Tran_status
 	Transaction.Transaction_details = body.Transaction_details
 
 	if result := db.DB.Create(&Transaction); result.Error != nil {

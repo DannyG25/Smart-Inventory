@@ -33,11 +33,12 @@
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
                         <th pSortableColumn="ID">Code <p-sortIcon field="ID"></p-sortIcon></th>
-                        <th pSortableColumn="Comp_det_stock">Description <p-sortIcon field="Comp_det_stock"></p-sortIcon></th>
-                        <th pSortableColumn="Comp_det_maximum_mount">latitude <p-sortIcon field="Comp_det_maximum_mount"></p-sortIcon></th>
-                        <th pSortableColumn="Comp_det_minimun_moun">Lenght <p-sortIcon field="Comp_det_minimun_moun"></p-sortIcon></th>
-                        <th>Product </th>
-                        <th>Company </th>
+                        <th pSortableColumn="Product.Pro_name">Producto <p-sortIcon field="Product.Pro_name"></p-sortIcon></th>
+                        <th pSortableColumn="Comp_det_stock">Stock <p-sortIcon field="Comp_det_stock"></p-sortIcon></th>
+                        <th pSortableColumn="Comp_det_maximum_mount">Maximum Mount <p-sortIcon field="Comp_det_maximum_mount"></p-sortIcon></th>
+                        <th pSortableColumn="Comp_det_minimun_moun">Minimum Mount <p-sortIcon field="Comp_det_minimun_moun"></p-sortIcon></th>
+                        
+                        <th></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-company_detail>
@@ -47,6 +48,10 @@
                         </td>
                         <td style="width:14%; min-width:10rem;"><span class="p-column-title">Code</span>
                             {{company_detail.ID}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Lenght</span>
+                            {{company_detail.Product.Pro_name}}
                         </td>
                         <td style="width:14%; min-width:10rem;">
                             <span class="p-column-title">Description</span>
@@ -60,6 +65,7 @@
                             <span class="p-column-title">Lenght</span>
                             {{company_detail.Comp_det_minimun_moun}}
                         </td>
+                        
                        
 
                         <td>
@@ -78,38 +84,40 @@
 
         <p-dialog [(visible)]="company_detailDialog" [style]="{width: '450px'}" header="Company_detail Details" [modal]="true" class="p-fluid">
             <ng-template pTemplate="content">
-
-                <div class="formgrid grid">
-                    <div class="field col">
-                        <label for="lenght">Lenght</label>
+                <div class="field">
+                    <label for="product">Product</label>
+                        <p-dropdown [options]="productsItems" [(ngModel)]="selectedProduct" optionValue="value" placeholder="Select Item"
+                            [virtualScroll]="true" [virtualScrollItemSize]="38"></p-dropdown>
+                </div>
+                <div class="field">
+                    <label for="stock">Stock</label>
                         <!-- <input type="text" pInputText id="length" [(ngModel)]="company_detail.Bin_length"  /> -->
-                        <p-inputNumber format="decimal" [minFractionDigits]="6" [maxFractionDigits]="6" id="lenght" [(ngModel)]="company_detail.Comp_det_stock"></p-inputNumber>
-                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !company_detail.Comp_det_stock ">Names is required.</small>
+                        <p-inputNumber format="decimal"  id="stock" [(ngModel)]="company_detail.Comp_det_stock"></p-inputNumber>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !company_detail.Comp_det_stock ">Stock is required.</small>
+                </div>
+                <div class="formgrid grid">
+                    
+                    <div class="field col">
+                        <label for="maximum">Maximum Mount</label>
+                        <!-- <input type="text" pInputText id="latitude" [(ngModel)]="company_detail.Bin_latitude " /> -->
+                        <p-inputNumber format="decimal"   id="maximum" [(ngModel)]="company_detail.Comp_det_maximum_mount"></p-inputNumber>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !company_detail.Comp_det_maximum_mount ">maximum mount is required.</small>
                     </div>
                     <div class="field col">
-                        <label for="latitude">Latitude</label>
-                        <!-- <input type="text" pInputText id="latitude" [(ngModel)]="company_detail.Bin_latitude " /> -->
-                        <p-inputNumber format="decimal" [minFractionDigits]="6" [maxFractionDigits]="6"  id="latitude" [(ngModel)]="company_detail.Comp_det_maximum_mount"></p-inputNumber>
-                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !company_detail.Comp_det_maximum_mount ">Lastnames is required.</small>
+                        <label for="minimum">Minimum Mount</label>
+                        <!-- <input type="text" pInputText id="length" [(ngModel)]="company_detail.Bin_length"  /> -->
+                        <p-inputNumber format="decimal"  id="lenght" [(ngModel)]="company_detail.Comp_det_minimun_moun"></p-inputNumber>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !company_detail.Comp_det_minimun_moun ">minimum mount is required.</small>
                     </div>
                 </div>
 
                 <div class="formgrid grid">
                     <div class="field col">
-                        <label for="lenght">Lenght</label>
-                        <!-- <input type="text" pInputText id="length" [(ngModel)]="company_detail.Bin_length"  /> -->
-                        <p-inputNumber format="decimal" [minFractionDigits]="6" [maxFractionDigits]="6" id="lenght" [(ngModel)]="company_detail.Comp_det_minimun_moun"></p-inputNumber>
-                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !company_detail.Comp_det_minimun_moun ">Names is required.</small>
                     </div>
                     
                 </div>
                
                 
-                <!-- <div class="field">
-                    <label for="company_detailID">Main Company_detail ID</label>
-                    <p-inputNumber id="company_detailID" [(ngModel)]="company_detail.Company_detailID"></p-inputNumber>
-                    
-                </div> -->
                
 
 
@@ -128,26 +136,37 @@
             <ng-template pTemplate="content">
 
                 <div class="field">
-                    <label for="description">Description Company_detail</label>
-                    <input type="text" pInputText id="description" [(ngModel)]="company_detail.Bin_description"  />
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !company_detail.Bin_description">Address is required.</small>
+                    <label for="product">Product</label>
+                        <p-dropdown [options]="productsItems" [(ngModel)]="selectedProduct" optionValue="value" placeholder="Select Item"
+                            [virtualScroll]="true" [virtualScrollItemSize]="38"></p-dropdown>
+                </div>
+                <div class="field">
+                    <label for="stock">Stock</label>
+                        <!-- <input type="text" pInputText id="length" [(ngModel)]="company_detail.Bin_length"  /> -->
+                        <p-inputNumber format="decimal"  id="stock" [(ngModel)]="company_detail.Comp_det_stock"></p-inputNumber>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !company_detail.Comp_det_stock ">Stock is required.</small>
+                </div>
+                <div class="formgrid grid">
+                    
+                    <div class="field col">
+                        <label for="maximum">Maximum Mount</label>
+                        <!-- <input type="text" pInputText id="latitude" [(ngModel)]="company_detail.Bin_latitude " /> -->
+                        <p-inputNumber format="decimal"   id="maximum" [(ngModel)]="company_detail.Comp_det_maximum_mount"></p-inputNumber>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !company_detail.Comp_det_maximum_mount ">maximum mount is required.</small>
+                    </div>
+                    <div class="field col">
+                        <label for="minimum">Minimum Mount</label>
+                        <!-- <input type="text" pInputText id="length" [(ngModel)]="company_detail.Bin_length"  /> -->
+                        <p-inputNumber format="decimal"  id="lenght" [(ngModel)]="company_detail.Comp_det_minimun_moun"></p-inputNumber>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !company_detail.Comp_det_minimun_moun ">minimum mount is required.</small>
+                    </div>
                 </div>
 
                 <div class="formgrid grid">
                     <div class="field col">
-                        <label for="lenght">Lenght</label>
-                        <!-- <input type="text" pInputText id="length" [(ngModel)]="company_detail.Bin_length"  /> -->
-                        <p-inputNumber format="decimal" [minFractionDigits]="6" [maxFractionDigits]="6" id="lenght" [(ngModel)]="company_detail.Bin_lenght"></p-inputNumber>
-                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !company_detail.Bin_lenght ">Names is required.</small>
                     </div>
-                    <div class="field col">
-                        <label for="latitude">Latitude</label>
-                        <!-- <input type="text" pInputText id="latitude" [(ngModel)]="company_detail.Bin_latitude " /> -->
-                        <p-inputNumber format="decimal" [minFractionDigits]="6" [maxFractionDigits]="6"  id="latitude" [(ngModel)]="company_detail.Bin_latitude"></p-inputNumber>
-                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !company_detail.Bin_latitude ">Lastnames is required.</small>
-                    </div>
+                    
                 </div>
-                
 
             </ng-template>
 

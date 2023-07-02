@@ -29,6 +29,7 @@ export class TransactionslistMComponent implements OnInit, AfterViewInit {
     deleteTransactionDialog: boolean = false;
 
     deleteTransactionsDialog: boolean = false;
+    updateStatusDialog: boolean = false;
     transactions: Transaction[] = [];
     transaction: Transaction = {
         Transaction_details: [],
@@ -54,8 +55,8 @@ export class TransactionslistMComponent implements OnInit, AfterViewInit {
     CompanyData?: Company;
     mapa: any;
     directionsService = new google.maps.DirectionsService();
-    directionsDisplay = new google.maps.DirectionsRenderer();
-   
+    directionsRenderer = new google.maps.DirectionsRenderer();
+
     @ViewChild(GoogleMap) map!: GoogleMap;    private mapContainer!: ElementRef<HTMLElement>;
     locations: { name: string, lat: number, lng: number }[] = []; 
     mainlocation: { name: string; lat: number; lng: number; }[] = []; 
@@ -103,6 +104,39 @@ export class TransactionslistMComponent implements OnInit, AfterViewInit {
             queryParams: { id: transaction.ID },
         });
     }
+
+    updateStatus(transaction: Transaction) {
+        this.updateStatusDialog = true;
+        this.transaction = { ...transaction };
+      }
+
+      confirmUpdate() {
+        this.locations=[]
+        this.mainlocation=[]
+        this.binnacle={}
+        this.companies=[]
+        this.transactions=[]
+        this.updateStatusDialog = false;
+        this.transaction.Tran_status="done"
+        this._api.putTypeRequest('transactions/status', this.transaction).subscribe((res: any) => {
+          this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Status Update', life: 3000 });
+
+          this._api.getTypeRequest('transactions').subscribe(
+            (data: any) => {
+                this.transactions = data;
+                this.loadCompanyMap();
+
+            },
+            (err) => {
+                console.log(err)
+            }
+        );
+        }, err => {
+          console.log(err)
+        });
+        this.transaction = {};
+    
+      }
 
     confirmDeleteSelected() {
         this.deleteTransactionsDialog = false;
@@ -165,10 +199,11 @@ export class TransactionslistMComponent implements OnInit, AfterViewInit {
               }
             
         }
-            
+        console.log("transactions")
+        console.log(this.transactions)
         this.transactions.forEach((item) => {
             // console.log(item);
-            if (item.Users2?.Company) {
+            if (item.Users2?.Company && item.Tran_status==="not_done") {
                 this.companies?.push(item.Users2.Company);
                
             }
@@ -190,17 +225,25 @@ export class TransactionslistMComponent implements OnInit, AfterViewInit {
                         }
                     }
                 }
+
                 console.log(this.locations)
             }
-        // this.loadGoogleMap()
-        this.drawRoute()
+            this.directionsRenderer.setMap(null);
+
+            if(this.locations.length > 0){
+                this.drawRoute()
+            }
+        
     }
     
       drawRoute(): void {
+        console.log("entro")
         console.log(this.mainlocation);
-        const directionsService = new google.maps.DirectionsService();
-        const directionsRenderer = new google.maps.DirectionsRenderer();
-        directionsRenderer.setMap(this.map.googleMap!);
+        console.log(this.locations);
+        this.directionsService = new google.maps.DirectionsService();
+        this.directionsRenderer = new google.maps.DirectionsRenderer();
+
+        this.directionsRenderer.setMap(this.map.googleMap!);
       
         const waypoints: google.maps.DirectionsWaypoint[] = this.locations.map(location => ({
           location: { lat: Number(location.lat), lng: Number(location.lng) },
@@ -210,20 +253,20 @@ export class TransactionslistMComponent implements OnInit, AfterViewInit {
         console.log(waypoints)
        
         
-        directionsService.route({
+        this.directionsService.route({
           origin: { lat: Number(this.binnacle?.Bin_latitude), lng: Number(this.binnacle?.Bin_lenght) },
           destination: {lat: Number(this.binnacle?.Bin_latitude), lng: Number(this.binnacle?.Bin_lenght) },
           waypoints: waypoints,
           travelMode: google.maps.TravelMode.DRIVING,
         }, (response: google.maps.DirectionsResult, status: google.maps.DirectionsStatus) => {
           if (status === 'OK') {
-            directionsRenderer.setDirections(response);
+            this.directionsRenderer.setDirections(response);
           } else {
             window.alert('Directions request failed due to ' + status);
           }
         });
       }
       
-
+     
       
 }

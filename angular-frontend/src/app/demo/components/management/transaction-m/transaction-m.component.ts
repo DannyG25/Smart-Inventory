@@ -19,6 +19,7 @@ import { EventsourceService } from 'src/app/demo/service/eventsource.service';
 import { HttpsourceService } from 'src/app/demo/service/httpsource.service';
 import { Transaction } from 'src/app/demo/api/transaction';
 import { Transaction_detail } from 'src/app/demo/api/transaction_detail';
+import { Company_detail } from 'src/app/demo/api/company_detail';
 @Component({
     providers: [MessageService],
     templateUrl: './transaction-m.component.html',
@@ -53,6 +54,7 @@ export class TransactionMComponent implements OnInit {
     private subscription!: Subscription;
     eventData: any;
     total:number=0
+    company_detail: Company_detail = {};
 
     constructor(
         private _api: ApiService,
@@ -159,12 +161,17 @@ export class TransactionMComponent implements OnInit {
             this.header_transaction.Tran_date=this.date
             this.header_transaction.Tran_Total= this.total
             this.header_transaction.Transaction_details=this.transaction_details
-            console.log(this.header_transaction)
+            this.header_transaction.Tran_status="not_done"
+            var stocks=this.transaction_details
             this._api.postTypeRequest('transactions', this.header_transaction).subscribe((res: any) => {
+                console.log(stocks)
+                this.updateStock(stocks)
                 this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Transaction Saved', life: 3000 });
+
             }, err => {
                 console.log(err)
             });
+            
             this.total=0
             this.header_transactions = [];
             this.header_transaction={};
@@ -176,9 +183,27 @@ export class TransactionMComponent implements OnInit {
         
     }
     totalTransaction(){
-        console.log(this.transaction_details)
+        
         const suma= this.transaction_details.reduce((total, detail) => total + (detail.Tran_det_subtotal || 0), 0);
         this.total=parseFloat( suma.toFixed(2))
         
     }
+
+    updateStock(transactions_details: Transaction_detail[] = []) {
+        console.log(transactions_details)
+        for (let transaction_detail of transactions_details) {
+            
+            this.company_detail.Comp_det_stock=transaction_detail.Tran_det_mount
+            this.company_detail.Product_id=transaction_detail.Product?.ID
+            console.log(this.company_detail)
+            this._api.putTypeRequest('company_details/stock', this.company_detail).subscribe((res: any) => {
+            }, err => {
+                console.log(err)
+            });
+          }
+          this.company_detail={}
+         
+        }
+
+      
 }

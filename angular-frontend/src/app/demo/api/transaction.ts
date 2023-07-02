@@ -5,6 +5,7 @@ export interface Transaction {
     ID?: number,
     Tran_date?: Date
     Tran_Total?: number
+    Tran_status?: string 
     Device_id?: number
     Users_id?: number
     Users2_id?: number

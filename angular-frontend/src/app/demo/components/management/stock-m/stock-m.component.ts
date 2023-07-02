@@ -6,6 +6,7 @@ import { SelectItem } from 'primeng/api';
 import { Company_detail } from 'src/app/demo/api/company_detail';
 import { User } from 'src/app/demo/api/users';
 import { ActivatedRoute } from '@angular/router';
+import { Product } from 'src/app/demo/api/product';
 
 @Component({
   providers: [MessageService],
@@ -21,12 +22,15 @@ export class StockMComponent {
   deleteCompany_detailsDialog: boolean = false;
 
   company_details: Company_detail[] = [];
-
+  products: Product[] = [];
+  selectedProduct: any
+  product: Product = {};
   company_detail: Company_detail = {};
   userData?: Company_detail
   selectedCompany_details: Company_detail[] = [];
   selectedStatus: any;
   submitted: boolean = false;
+  productsItems: SelectItem[] = [];
 
   cols: any[] = [];
 
@@ -43,6 +47,12 @@ export class StockMComponent {
   ngOnInit() {
     this._api.getTypeRequest('users/validate').subscribe((user: any) => {
       this.userData = user
+      this.id=this.userData?.Company_id ?? 0
+      this._api.getAllByIdTypeRequest('company_details/company_detailsid', this.id).subscribe((data: any) => {
+          this.company_details = data
+        }, err => {
+          console.log(err)
+        });
     }, (err: any) => {
       console.log(err)
     });
@@ -51,11 +61,7 @@ export class StockMComponent {
       const idf = params.get('id');
       if (idf !== null && idf !== undefined) {
         this.id = Number(idf)
-        this._api.getAllByIdTypeRequest('company_details/company_detailsid', this.id).subscribe((data: any) => {
-          this.company_details = data
-        }, err => {
-          console.log(err)
-        });
+        
       }
 
 
@@ -67,23 +73,19 @@ export class StockMComponent {
     this.cols = [
       { field: 'company_detail', header: 'Company_detail' }
     ];
+    this._api.getTypeRequest('products').subscribe((data: any) => {
+      this.products = data
+    }, err => {
+      console.log(err)
+    });
 
 
 
   }
 
   openNew() {
-
-    // this.statuses=  [];
-    // this.company_detailDialog = true;
-    // this.company_details.forEach(comp => {
-    //   const statusElement = {
-    //     label: comp.Mov_name,
-    //     value: comp.ID
-    //   };
-    //   this.statuses.push(statusElement);
-    // });
-
+    this.selectedProduct=0
+    this.loadItems();
     this.company_detail = {};
     this.submitted = false;
     this.company_detailDialog = true;
@@ -96,8 +98,10 @@ export class StockMComponent {
   }
 
   editCompany_detail(company_detail: Company_detail) {
+    this.loadItems();
     this.company_detail = { ...company_detail };
     this.editCompany_detailDialog = true;
+    this.selectedProduct=this.company_detail.Product_id
   }
 
   deleteCompany_detail(company_detail: Company_detail) {
@@ -138,13 +142,14 @@ export class StockMComponent {
     this.company_detailDialog = false;
     this.submitted = false;
     this.editCompany_detailDialog = false;
+    this.selectedProduct=0
   }
 
   saveCompany_detail() {
     this.submitted = true;
-    if (this.company_detail.Comp_det_stock?.trim()) {
-      console.log(this.company_detail)
-      // this.company_detail.Device_id = this.id
+    if (this.selectedProduct) {
+      this.company_detail.Company_id=this.userData?.Company_id
+      this.company_detail.Product_id = this.selectedProduct
       console.log(this.company_detail)
       this._api.postTypeRequest('company_details', this.company_detail).subscribe((res: any) => {
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Company_detail Created', life: 3000 });
@@ -154,12 +159,16 @@ export class StockMComponent {
       });
       this.company_detailDialog = false;
       this.company_detail = {};
+      this.selectedProduct=0
+      
     }
   }
   saveEditCompany_detail() {
     this.submitted = true;
-    if (this.company_detail.Comp_det_stock?.trim()) {
-      // this.company_detail.Device_id = this.id
+    if (this.selectedProduct ) {
+      this.company_detail.Company_id=this.userData?.Company_id
+      this.company_detail.Product_id = this.selectedProduct
+      console.log(this.company_detail)
       this._api.putTypeRequest('company_details', this.company_detail).subscribe((res: any) => {
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Company_detail Updated', life: 3000 });
 
@@ -170,10 +179,26 @@ export class StockMComponent {
       });
       this.editCompany_detailDialog = false;
       this.company_detail = {};
+      this.selectedProduct=0
     }
   }
 
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+  }
+  loadItems(){
+    this.productsItems=  [];
+
+
+    
+    this.products.forEach(pro => {
+      const producElement = {
+        label: pro.Pro_name,
+        value: pro.ID
+      };
+      this.productsItems.push(producElement);
+    });
+
+    
   }
 }

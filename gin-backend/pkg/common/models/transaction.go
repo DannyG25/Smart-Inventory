@@ -10,6 +10,7 @@ type Transaction struct {
 	gorm.Model
 	Tran_date           time.Time
 	Tran_Total          float32
+	Tran_status         string
 	Device_id           uint
 	Users_id            uint `gorm:"foreignKey:Users"`
 	Users2_id           uint `gorm:"foreignKey:Users2"`

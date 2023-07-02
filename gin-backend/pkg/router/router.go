@@ -126,7 +126,9 @@ func Routers() *gin.Engine {
 	company_detailsRouter.POST("/", company_detail.AddCompany_Detail)
 	company_detailsRouter.GET("/", company_detail.GetCompany_Details)
 	company_detailsRouter.GET("/:id", company_detail.GetCompany_Detail)
+	company_detailsRouter.GET("/company_detailsid/:id", company_detail.GetCompany_detailsID)
 	company_detailsRouter.PUT("/", company_detail.UpdateCompany_Detail)
+	company_detailsRouter.PUT("/stock", company_detail.UpdateStock)
 	company_detailsRouter.DELETE("/:id", company_detail.DeleteCompany_Detail)
 
 	antenna := antena.NewHandler()
@@ -140,6 +142,7 @@ func Routers() *gin.Engine {
 	transactionsRouter.GET("/", transaction.GetTransactions)
 	transactionsRouter.GET("/:id", transaction.GetTransaction)
 	transactionsRouter.PUT("/", transaction.UpdateTransaction)
+	transactionsRouter.PUT("/status", transaction.UpdateTransactionStatus)
 	transactionsRouter.DELETE("/:id", transaction.DeleteTransaction)
 
 	inventoriesRouter := baseRouter.Group("/inventories")
