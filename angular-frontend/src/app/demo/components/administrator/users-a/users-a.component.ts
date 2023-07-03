@@ -7,10 +7,10 @@ import { User } from 'src/app/demo/api/users';
 
 @Component({
   providers: [MessageService],
-  templateUrl: './employee-m.component.html',
-  styleUrls: ['./employee-m.component.scss']
+  templateUrl: './users-a.component.html',
+  styleUrls: ['./users-a.component.scss']
 })
-export class EmployeeMComponent {
+export class UsersAComponent {
   userDialog: boolean = false;
   editUserDialog: boolean = false;
 
@@ -41,15 +41,14 @@ export class EmployeeMComponent {
   ngOnInit() {
     this._api.getTypeRequest('users/validate').subscribe((user: any) => {
       this.UserData = user
-      this._api.getAllByIdTypeRequest('users/employees',this.UserData?.Company_id ?? 0).subscribe((data: any) => {
-        this.users = data
-      }, err => {
-        console.log(err)
-      });
     }, (err: any) => {
       console.log(err)
     });
-    
+    this._api.getTypeRequest('users').subscribe((data: any) => {
+      this.users = data
+    }, err => {
+      console.log(err)
+    });
     this.cols = [
       { field: 'user', header: 'User' }
     ];
@@ -112,7 +111,7 @@ export class EmployeeMComponent {
     this._api.deleteTypeRequest('users', this.user.ID).subscribe((res: any) => {
       this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000 });
       this.user = {};
-      this._api.getAllByIdTypeRequest('users/employees',this.UserData?.Company_id ?? 0).subscribe((data: any) => this.users = data);
+      this._api.getTypeRequest('users').subscribe((data: any) => this.users = data);
     }, err => {
       console.log(err)
     });
@@ -129,10 +128,10 @@ export class EmployeeMComponent {
     this.submitted = true;
     if (this.user.User_names?.trim()) {
       console.log(this.user)
-      this.user.Company_id=this.UserData?.Company_id
+      
       this._api.postTypeRequest('users', this.user).subscribe((res: any) => {
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Created', life: 3000 });
-        this._api.getAllByIdTypeRequest('users/employees',this.UserData?.Company_id ?? 0).subscribe((data: any) => this.users = data);
+        this._api.getTypeRequest('users').subscribe((data: any) => this.users = data);
       }, err => {
         console.log(err)
       });
@@ -144,12 +143,11 @@ export class EmployeeMComponent {
     this.submitted = true;
     if (this.user.User_names?.trim()) {
       console.log(this.user.User_names)
-      this.user.Company_id=this.UserData?.Company_id
       this._api.putTypeRequest('users', this.user).subscribe((res: any) => {
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Updated', life: 3000 });
 
         console.log()
-        this._api.getAllByIdTypeRequest('users/employees',this.UserData?.Company_id ?? 0).subscribe((data: any) => this.users = data);
+        this._api.getTypeRequest('users').subscribe((data: any) => this.users = data);
       }, err => {
         console.log(err)
       });
@@ -161,4 +159,6 @@ export class EmployeeMComponent {
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
+
+
 }

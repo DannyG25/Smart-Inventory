@@ -47,7 +47,8 @@ export class InventorylistMComponent {
   ngOnInit() {
     this._api.getTypeRequest('users/validate').subscribe((user: any) => {
       this.userData = user
-      this._api.getTypeRequest('inventories').subscribe((data: any) => {
+      console.log(this.userData?.Company_id)
+      this._api.getAllByIdTypeRequest('inventories/inventoriesid',this.userData?.Company_id ?? 0).subscribe((data: any) => {
         this.inventories = data
       }, err => {
         console.log(err)
@@ -127,7 +128,7 @@ export class InventorylistMComponent {
         Inventory_details:[]
 
       };
-      this._api.getTypeRequest('inventories').subscribe((data: any) => this.inventories = data);
+      this._api.getAllByIdTypeRequest('inventories/inventoriesid',this.userData?.Company_id ?? 0).subscribe((data: any) => this.inventories = data);
     }, err => {
       console.log(err)
     }

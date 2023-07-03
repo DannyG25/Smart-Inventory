@@ -10,7 +10,7 @@ import (
 
 // FindAllDevicesById 		godoc
 // @Summary			Get All devices by Id.
-// @Description		Return list of devices.
+// @Description		Return list of devices by Id.
 // @Tags			devices
 // @Success			200  "Devices successfully recovered."
 // @Router			/devices [get]

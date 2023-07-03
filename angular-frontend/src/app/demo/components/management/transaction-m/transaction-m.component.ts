@@ -66,6 +66,15 @@ export class TransactionMComponent implements OnInit {
     ngOnInit(): void {
         this._api.getTypeRequest('users/validate').subscribe((user: any) => {
             this.userData = user
+            this._api.getByIdTypeRequest('users/usersid',this.userData?.Company_id ?? 0).subscribe(
+                (data: any) => {
+                    console.log(data)
+                    this.users = data;
+                },
+                (err) => {
+                    console.log(err);
+                }
+            );
             
           }, (err: any) => {
             console.log(err)
@@ -78,14 +87,7 @@ export class TransactionMComponent implements OnInit {
                 console.log(err);
             }
         );
-        this._api.getTypeRequest('users').subscribe(
-            (data: any) => {
-                this.users = data;
-            },
-            (err) => {
-                console.log(err);
-            }
-        );
+       
         this.date = new Date();
         
 

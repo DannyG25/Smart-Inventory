@@ -23,33 +23,7 @@
             <p-divider type="solid"></p-divider>
 
             <div class="p-fluid p-formgrid grid">
-                <!-- <div class="field col-12 md:col-6">
-					<label htmlFor="client">Client</label>
-					<input pInputText id="client" disabled value="" type="text" />
-				</div>
-				<div class="field col-12 md:col-6">
-					<label htmlFor="address">Address</label>
-					<input pInputText id="address" disabled value="" type="text" />
-				</div>
-				<div class="field col-12 md:col-6">
-					<label htmlFor="phone">Phone Number</label>
-					<input pInputTextarea id="phone" disabled value="" type="text" />
-				</div>
-				<div class="field col-12 md:col-6">
-					<label htmlFor="ruc">RUC</label>
-					<input pInputText id="ruc" disabled value="" type="text" />
-				</div>
-				<div class="field col-12 md:col-3">
-					<label htmlFor="mail">Mail</label>
-					<input pInputText id="mail" disabled value="" type="text" />
-				</div> -->
-                <!-- <div class="field col-12 md:col-4">
-					<span class="p-float-label">
-						<p-autoComplete inputId="autocomplete" [(ngModel)]="value2" [suggestions]="filteredCountries"
-						(completeMethod)="searchCountry($event)" field="name"></p-autoComplete>
-						<label for="autocomplete">AutoComplete</label>
-					</span>
-				</div> -->
+             
 
                 <div class="field col-12 md:col-4">
                     <label htmlFor="client"><strong>Client</strong></label>
@@ -181,7 +155,7 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="footer">
-                    <tr>
+                    <!-- <tr>
                         <td class="text-right" colspan="4">
                             <span>Net $</span>
                         </td>
@@ -190,15 +164,15 @@
                             
                         </td>
                         <td></td>
-                    </tr>
+                    </tr> -->
 
                     <tr>
                         <td class="text-right" colspan="4">
-                            <span>Total $</span>
+                            <span>Total </span>
                         </td>
                         <td>
-                            <span class="p-column-title">0.00</span>
-                            {{total}}
+                            <span class="p-column-title"></span>
+                            $ {{total}}
                         </td>
                         <td></td>
                     </tr>

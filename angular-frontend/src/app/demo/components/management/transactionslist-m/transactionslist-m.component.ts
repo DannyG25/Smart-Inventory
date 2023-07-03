@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+    AfterViewInit,
+    Component,
+    ElementRef,
+    OnInit,
+    ViewChild,
+} from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { ApiService } from 'src/app/demo/service/api.service';
@@ -15,7 +21,6 @@ import { HttpClient } from '@angular/common/http';
 import { MapInfoWindow, MapMarker, GoogleMap } from '@angular/google-maps';
 
 declare var google: any;
-
 
 @Component({
     providers: [MessageService],
@@ -57,10 +62,11 @@ export class TransactionslistMComponent implements OnInit, AfterViewInit {
     directionsService = new google.maps.DirectionsService();
     directionsRenderer = new google.maps.DirectionsRenderer();
 
-    @ViewChild(GoogleMap) map!: GoogleMap;    private mapContainer!: ElementRef<HTMLElement>;
-    locations: { name: string, lat: number, lng: number }[] = []; 
-    mainlocation: { name: string; lat: number; lng: number; }[] = []; 
-     constructor(
+    @ViewChild(GoogleMap) map!: GoogleMap;
+    private mapContainer!: ElementRef<HTMLElement>;
+    locations: { name: string; lat: number; lng: number }[] = [];
+    mainlocation: { name: string; lat: number; lng: number }[] = [];
+    constructor(
         private _api: ApiService,
         private messageService: MessageService,
         private router: Router,
@@ -68,32 +74,30 @@ export class TransactionslistMComponent implements OnInit, AfterViewInit {
     ) {}
 
     ngOnInit() {
-        
         this._api.getTypeRequest('users/validate').subscribe(
             (user: any) => {
                 this.userData = user;
-                this._api.getTypeRequest('transactions').subscribe(
-                    (data: any) => {
-                        this.transactions = data;
-                        this.loadCompanyMap();
-
-                    },
-                    (err) => {
-                    }
-                );
+                this._api
+                    .getAllByIdTypeRequest(
+                        'transactions/transactionsid',
+                        this.userData?.Company_id ?? 0
+                    )
+                    .subscribe(
+                        (data: any) => {
+                            this.transactions = data;
+                            this.loadCompanyMap();
+                        },
+                        (err) => {}
+                    );
             },
-            (err: any) => {
-            }
+            (err: any) => {}
         );
 
         this.cols = [{ field: 'transaction', header: 'Transaction' }];
-
-
     }
     ngAfterViewInit(): void {
         // this.drawRoute();
-      }
-
+    }
 
     deleteSelectedTransactions() {
         this.deleteTransactionsDialog = true;
@@ -108,35 +112,48 @@ export class TransactionslistMComponent implements OnInit, AfterViewInit {
     updateStatus(transaction: Transaction) {
         this.updateStatusDialog = true;
         this.transaction = { ...transaction };
-      }
+    }
 
-      confirmUpdate() {
-        this.locations=[]
-        this.mainlocation=[]
-        this.binnacle={}
-        this.companies=[]
-        this.transactions=[]
+    confirmUpdate() {
+        this.locations = [];
+        this.mainlocation = [];
+        this.binnacle = {};
+        this.companies = [];
+        this.transactions = [];
         this.updateStatusDialog = false;
-        this.transaction.Tran_status="done"
-        this._api.putTypeRequest('transactions/status', this.transaction).subscribe((res: any) => {
-          this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Status Update', life: 3000 });
+        this.transaction.Tran_status = 'done';
+        this._api
+            .putTypeRequest('transactions/status', this.transaction)
+            .subscribe(
+                (res: any) => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Successful',
+                        detail: 'Status Update',
+                        life: 3000,
+                    });
 
-          this._api.getTypeRequest('transactions').subscribe(
-            (data: any) => {
-                this.transactions = data;
-                this.loadCompanyMap();
-
-            },
-            (err) => {
-                console.log(err)
-            }
-        );
-        }, err => {
-          console.log(err)
-        });
+                    this._api
+                        .getAllByIdTypeRequest(
+                            'transactions/transactionsid',
+                            this.userData?.Company_id ?? 0
+                        )
+                        .subscribe(
+                            (data: any) => {
+                                this.transactions = data;
+                                this.loadCompanyMap();
+                            },
+                            (err) => {
+                                console.log(err);
+                            }
+                        );
+                },
+                (err) => {
+                    console.log(err);
+                }
+            );
         this.transaction = {};
-    
-      }
+    }
 
     confirmDeleteSelected() {
         this.deleteTransactionsDialog = false;
@@ -146,8 +163,7 @@ export class TransactionslistMComponent implements OnInit, AfterViewInit {
                 .deleteTypeRequest('transactions', selectTransaction.ID)
                 .subscribe(
                     (res: any) => {},
-                    (err) => {
-                    }
+                    (err) => {}
                 );
         }
         // this._api.getTypeRequest('transactions').subscribe((data: any) => this.transactions = data);
@@ -178,95 +194,114 @@ export class TransactionslistMComponent implements OnInit, AfterViewInit {
     }
 
     loadCompanyMap() {
-        
-
-        
         this.CompanyData = this.userData?.Company;
-        console.log(this.CompanyData)
-        for (let device of this.CompanyData?.Devices ??
-            []) {
+        console.log(this.CompanyData);
+        for (let device of this.CompanyData?.Devices ?? []) {
             // for (let binnacle of device.Binnacles ?? []) {
             let binnacles = device.Binnacles ?? [];
             this.binnacle = binnacles[binnacles.length - 1];
             console.log(this.binnacle);
-            this.binnacle.Bin_lenght
-            if(this.binnacle.Bin_description && this.binnacle.Bin_latitude && this.binnacle.Bin_lenght) {
+            this.binnacle.Bin_lenght;
+            if (
+                this.binnacle.Bin_description &&
+                this.binnacle.Bin_latitude &&
+                this.binnacle.Bin_lenght
+            ) {
                 this.mainlocation.push({
-                  name: this.binnacle.Bin_description,
-                  lat: this.binnacle.Bin_latitude,
-                  lng: this.binnacle.Bin_lenght
+                    name: this.binnacle.Bin_description,
+                    lat: this.binnacle.Bin_latitude,
+                    lng: this.binnacle.Bin_lenght,
                 });
-              }
-            
+            }
         }
-        console.log("transactions")
-        console.log(this.transactions)
+        console.log('transactions');
+        console.log(this.transactions);
+        const uniqueUsers2 = new Set<number>(); // Conjunto para almacenar los identificadores únicos de Users2
+
         this.transactions.forEach((item) => {
-            // console.log(item);
-            if (item.Users2?.Company && item.Tran_status==="not_done") {
-                this.companies?.push(item.Users2.Company);
-               
+            if (item.Users2?.Company && item.Tran_status === 'not_done') {
+                const users2Id = item.Users2.ID; // Obtener el identificador de Users2
+
+                if (!uniqueUsers2.has(users2Id!)) {
+                    // Verificar si Users2 ya se ha agregado al conjunto
+                    uniqueUsers2.add(users2Id!); // Agregar el identificador de Users2 al conjunto
+                    this.companies?.push(item.Users2.Company); // Agregar Company al array companies
+                }
             }
         });
         console.log(this.companies);
-            if (this.companies) {
-                
-                for (let company of this.companies) {
-                    for (let device of company.Devices ?? []) {
-                        for (let binnacle of device.Binnacles ?? []) {
-                            if(binnacle.Bin_description && binnacle.Bin_latitude && binnacle.Bin_lenght) {
-                                this.locations.push({
-                                  name: binnacle.Bin_description,
-                                  lat: binnacle.Bin_latitude,
-                                  lng: binnacle.Bin_lenght
-                                });
-                              }
-                            
+        if (this.companies) {
+            for (let company of this.companies) {
+                for (let device of company.Devices ?? []) {
+                    for (let binnacle of device.Binnacles ?? []) {
+                        if (
+                            binnacle.Bin_description &&
+                            binnacle.Bin_latitude &&
+                            binnacle.Bin_lenght
+                        ) {
+                            this.locations.push({
+                                name: binnacle.Bin_description,
+                                lat: binnacle.Bin_latitude,
+                                lng: binnacle.Bin_lenght,
+                            });
                         }
                     }
                 }
-
-                console.log(this.locations)
             }
-            this.directionsRenderer.setMap(null);
 
-            if(this.locations.length > 0){
-                this.drawRoute()
-            }
-        
+            console.log(this.locations);
+        }
+        this.directionsRenderer.setMap(null);
+
+        if (this.locations.length > 0) {
+            this.drawRoute();
+        }
     }
-    
-      drawRoute(): void {
-        console.log("entro")
+
+    drawRoute(): void {
+        console.log('entro');
         console.log(this.mainlocation);
         console.log(this.locations);
         this.directionsService = new google.maps.DirectionsService();
         this.directionsRenderer = new google.maps.DirectionsRenderer();
 
         this.directionsRenderer.setMap(this.map.googleMap!);
-      
-        const waypoints: google.maps.DirectionsWaypoint[] = this.locations.map(location => ({
-          location: { lat: Number(location.lat), lng: Number(location.lng) },
-          stopover: true,
-        }));
-       
-        console.log(waypoints)
-       
-        
-        this.directionsService.route({
-          origin: { lat: Number(this.binnacle?.Bin_latitude), lng: Number(this.binnacle?.Bin_lenght) },
-          destination: {lat: Number(this.binnacle?.Bin_latitude), lng: Number(this.binnacle?.Bin_lenght) },
-          waypoints: waypoints,
-          travelMode: google.maps.TravelMode.DRIVING,
-        }, (response: google.maps.DirectionsResult, status: google.maps.DirectionsStatus) => {
-          if (status === 'OK') {
-            this.directionsRenderer.setDirections(response);
-          } else {
-            window.alert('Directions request failed due to ' + status);
-          }
-        });
-      }
-      
-     
-      
+
+        const waypoints: google.maps.DirectionsWaypoint[] = this.locations.map(
+            (location) => ({
+                location: {
+                    lat: Number(location.lat),
+                    lng: Number(location.lng),
+                },
+                stopover: true,
+            })
+        );
+
+        console.log(waypoints);
+
+        this.directionsService.route(
+            {
+                origin: {
+                    lat: Number(this.binnacle?.Bin_latitude),
+                    lng: Number(this.binnacle?.Bin_lenght),
+                },
+                destination: {
+                    lat: Number(this.binnacle?.Bin_latitude),
+                    lng: Number(this.binnacle?.Bin_lenght),
+                },
+                waypoints: waypoints,
+                travelMode: google.maps.TravelMode.DRIVING,
+            },
+            (
+                response: google.maps.DirectionsResult,
+                status: google.maps.DirectionsStatus
+            ) => {
+                if (status === 'OK') {
+                    this.directionsRenderer.setDirections(response);
+                } else {
+                    window.alert('Directions request failed due to ' + status);
+                }
+            }
+        );
+    }
 }
